@@ -1,1 +1,1 @@
-texfot pdflatex resolucion.pdf && xdg-open resolucion.pdf
+texfot pdflatex resolucion.tex && xdg-open resolucion.pdf
