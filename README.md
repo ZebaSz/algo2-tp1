@@ -1,7 +1,11 @@
 # Algoritmos y Estructuras de Datos 2 - TP TADs
 
+## Cómo trabajar en el proyecto
+
+Por ahora lo único para editar es `resolucion.tex`. Lo demás son bibliotecas.
+
 ## Cómo crear el PDF
 
-Antes de crear el PDF por primera vez, leer el archivo Leeme de la carpeta Paquetes-Latex para instalar los macros.
+Se puede usar TeXMaker, debería detectar todo de una.
 
-De ahí en adelante, se puede usar el script `crearpdf.sh` para compilar con pdflatex, que tire solo errores relevantes y abra el archivo (Linux-only).
+Se puede usar el script `crearpdf.sh` para compilar con pdflatex, que tire solo errores relevantes y abra el archivo (Linux-only).
