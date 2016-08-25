@@ -9,7 +9,6 @@
 \usepackage{aed2-symb,aed2-itef,aed2-tad,caratula}
 
 % COMANDOS ESPECIALES
-\newcommand{\renombre}[2]{\textbf{TAD} {#1} \textbf{ES} {#2}}
 
 \begin{document}
 
@@ -34,90 +33,16 @@
 %\newpage
 
 \section{TADs Auxiliares}
-	\renombre{posicion}{tupla(nat, nat)}
-	
-	\renombre{pokemon}{String}
+	\input{tads/auxiliares}
 	
 \section{TAD Mapa}
-	\begin{tad}{\tadNombre{Mapa}}
-		\tadGeneros{mapa}
-		
-		\tadExporta{}
-		
-		\tadIgualdadObservacional{m1}{m2}{mapa}{}
-		
-		\tadGeneradores
-			\tadAlinearFunciones{AgregarPos~}{posicion/p,conj(posicion)/ps,mapa/m}
-			
-			\tadOperacion{vacio}{}{mapa}{}
-			\tadOperacion{AgregarPos}{posicion/p,conj(posicion)/ps,mapa/m}{mapa}{$\neg$(p $\in$ posiciones(m)) $\land$ (ps $\subseteq$ posiciones(m)}			
-		\tadObservadores
-			\tadAlinearFunciones{conexionesDirectas~}{posicion/p,mapa/m}
-			
-			\tadOperacion{posiciones}{mapa}{conj(posicion)}{}
-			\tadOperacion{conexionesDirectas}{posicion/p,mapa/m}{conj(posicion)}{p $\in$ posiciones(m)}
-		\tadOtrasOperaciones
-			\tadAlinearFunciones{conexion~}{posicion, posicion, mapa}
-			
-			\tadOperacion{conexion?}{posicion/p1, posicion/p2, mapa/m}{bool}{p1 $\in$ posiciones(m) $\land$ p2 $\in$ posiciones(m)}
-		\tadAxiomas
-			
-			
-			\tadAxioma{posiciones(vacio)}{$\emptyset$}
-			\tadAxioma{posiciones(AgregarPos(p,ps,m))}{Ag(p, posiciones(m))}
-					
-			\tadAxioma{conexionesDirectas(p, AgregarPos(e, c, m))}
-			{\IF e = p THEN
-				c
-			ELSE
-				{\IF p $\in$ c THEN
-					Ag(e,conexionesDirectas(p,m))
-				ELSE
-					conexionesDirectas(p,m)
-				FI}
-			FI}
-			
-			\tadAxioma{conexion?(p1, p2, AgregarPos(e, c, m))}
-			{\IF p1 = e THEN
-				{\IF vacio?(c) THEN
-					false
-				ELSE 
-					p2 $\in$ c $\lor$ conexion?(dameUno(c),p2, m) $\lor$ conexion?(p1, p2, AgregarPos(e, sinUno(c), m))
-				FI}
-			ELSE
-				{\IF p2 = e THEN
-					{\IF vacio?(c) THEN
-						false
-					ELSE 
-						p1 $\in$ c $\lor$ conexion?(p1, dameUno(c), m) $\lor$ conexion?(p1, p2, AgregarPos(e, sinUno(c), m))
-					FI}
-				ELSE
-					conexion?(p1,p2,m)
-				FI}
-			FI}
-					
-
-	\end{tad}
+	\input{tads/mapa}
 
 \section{TAD Jugador}
-	\begin{tad}{\tadNombre{Jugador}}
-		\tadGeneros{jugador}
+	\input{tads/jugador}
 
-		\tadExporta{jugador, generadores, observadores b\'asicos}
-
-		\tadIgualdadObservacional{j1}{j2}{jugador}{}
-
-		\tadGeneradores
-
-		\tadObservadores
-
-		\tadOtrasOperaciones
-
-		\tadAxiomas
-
-	\end{tad}
-
-\section{TAD Juego}
+\section{TAD Sistema}
+	\input{tads/sistema}
 
 
 
