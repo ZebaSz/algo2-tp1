@@ -16,7 +16,7 @@
 		\tadOperacion{posiciones}{mapa}{conj(posicion)}{}
 		\tadOperacion{conexionesDirectas}{posicion/p,mapa/m}{conj(posicion)}{p $\in$ posiciones(m)}
 	\tadOtrasOperaciones
-		\tadAlinearFunciones{conexion~}{posicion, posicion, mapa}
+		\tadAlinearFunciones{conexion~}{posicion/p1, posicion/p2, mapa/m}
 		
 		\tadOperacion{conexion?}{posicion/p1, posicion/p2, mapa/m}{bool}{p1 $\in$ posiciones(m) $\land$ p2 $\in$ posiciones(m)}
 	\tadAxiomas

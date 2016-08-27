@@ -1,0 +1,153 @@
+\begin{tad}{\tadNombre{Sistema}}
+	\tadGeneros{sistema}
+	
+	\tadExporta{}
+	
+	\tadIgualdadObservacional{s}{s'}{sistema}{}
+	
+	\tadGeneradores
+		\tadAlinearFunciones{desconectarJugador~}{sistema/s, jugador/j, posicion/p}
+
+		\tadOperacion{crearSistema}{mapa}{sistema}{}
+
+		% TODO entra desconectado, sin pos o pos default?
+		\tadOperacion{registrarJugador}{sistema/s, jugador/j}{sistema}{$\neg$ j $\in$ jugadores(s)}
+
+		\tadOperacion{conectarJugador}{sistema/s, jugador/j, posicion/p}{sistema}{(j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s)  $\yluego \neg$conectado?(j,s)) $\land$ p $\in$ posiciones(mapa(s))}
+		\tadOperacion{desconectarJugador}{sistema/s, jugador/j}{sistema}{j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s)  $\yluego$ conectado?(j,s)}
+
+		% TODO movimientos validos
+		% TODO jugadores compartiendo posiciones entre si y con pokemons?
+		\tadOperacion{moverJugador}{sistema/s, jugador/j, posicion/p}{sistema}{(j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s)  $\yluego$conectado?(j,s)) $\land$ p $\in$ posiciones(mapa(s))}
+
+		% TODO distancia con otros pokemons
+		\tadOperacion{agregarPokemon}{sistema/s, pokemon, posicion/p}{sistema}{p $\in$ posiciones(mapa(s))}
+		
+	\tadObservadores
+		\tadAlinearFunciones{pokemonsCapturados~}{jugador/j, sistema/s}
+
+		\tadOperacion{mapa}{sistema}{mapa}{}
+
+		\tadOperacion{jugadores}{sistema}{conj(jugador)}{}
+		\tadOperacion{conectado?}{jugador/j, sistema/s}{bool}{j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s)}
+		\tadOperacion{posicionJugador}{jugador/j, sistema/s}{posicion}{j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s) $\yluego$conectado(j,s)}
+		\tadOperacion{sancionesJugador}{jugador/j, sistema/s}{nat}{j $\in$ jugadores(s)}
+		\tadOperacion{pokemonsCapturados}{jugador/j, sistema/s}{multiconj(pokemon)}{j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s)}
+
+		\tadOperacion{hayPokemon?}{posicion/p, sistema/s}{bool}{p $\in$ posiciones(mapa(s))}
+		\tadOperacion{pokemonEnPos}{posicion/p, sistema/s}{pokemon}{p $\in$ posiciones(mapa(s)) $\yluego$ hayPokemon?(p,s)}
+
+	\tadOtrasOperaciones
+		\tadAlinearFunciones{cantidadPokemons~}{pokemon/pk, sistema/s}
+		\tadOperacion{eliminado?}{jugador/j, sistema/s}{bool}{j $\in$ jugadores(s)}
+
+		% TODO si no hay ningun de ese pokemon?
+		\tadOperacion{rareza}{pokemon/pk, sistema/s}{nat}{}
+
+		\tadOperacion{cantidadPokemons}{sistema/s}{nat}{}
+
+	\tadAxiomas
+		\tadAxioma{mapa(crearSistema(m))}{m}
+		\tadAxioma{mapa(registrarJugador(s,j))}{mapa(s)}
+		\tadAxioma{mapa(conectarJugador(s,j,p))}{mapa(s)}
+		\tadAxioma{mapa(desconectarJugador(s,j))}{mapa(s)}
+		\tadAxioma{mapa(moverJugador(s,j,p))}{mapa(s)}
+		\tadAxioma{mapa(agregarPokemon(s,pk,p))}{mapa(s)}
+		
+		\tadAxioma{jugadores(crearSistema(m))}{$\emptyset$}
+		\tadAxioma{jugadores(registrarJugador(s,j))}{Ag(j,jugadores(s))}
+		\tadAxioma{jugadores(conectarJugador(s,j,p))}{jugadores(s)}
+		\tadAxioma{jugadores(desconectarJugador(s,j))}{jugadores(s)}
+		\tadAxioma{jugadores(moverJugador(s,j,p))}{jugadores(s)}
+		\tadAxioma{jugadores(agregarPokemon(s,pk,p))}{jugadores(s)}
+		
+		\tadAxioma{conectado?(j, registrarJugador(s,j'))}{\IF j = j' THEN false ELSE conectado?(j,s) FI}
+		\tadAxioma{conectado?(j, conectarJugador(s,j',p))}{\IF j = j' THEN true ELSE conectado?(j,s) FI}
+		\tadAxioma{conectado?(j, desconectarJugador(s,j'))}{\IF j = j' THEN false ELSE conectado?(j,s) FI}
+		\tadAxioma{conectado?(j, moverJugador(s,j',p))}{conectado?(j,s)}
+		\tadAxioma{conectado?(j, agregarPokemon(s,pk,p))}{conectado?(j,s)}
+
+		\tadAxioma{posicionJugador(j, registrarJugador(s,j'))}{posicionJugador(j,s)}
+		\tadAxioma{posicionJugador(j, conectarJugador(s,j',p))}{\IF j = j' THEN p ELSE posicionJugador(j,s) FI}
+		\tadAxioma{posicionJugador(j, desconectarJugador(s,j'))}{posicionJugador(j,s)}
+		% TODO y si se elimina?
+		\tadAxioma{posicionJugador(j, moverJugador(s,j',p))}{\IF j = j' THEN p ELSE posicionJugador(j,s) FI}
+		\tadAxioma{posicionJugador(j, agregarPokemon(s,pk,p))}{posicionJugador(j,s)}
+
+		% TODO sancionJugador
+		% TODO pokemonsCapturados
+
+		\tadAxioma{hayPokemon?(p, crearSistema(m))}{false}
+		\tadAxioma{hayPokemon?(p, registrarJugador(s,j))}{hayPokemon?(p,s)}
+		\tadAxioma{hayPokemon?(p, conectarJugador(s,j,p'))}{hayPokemon?(p,s)}
+		\tadAxioma{hayPokemon?(p, desconectarJugador(s,j))}{hayPokemon?(p,s)}
+		% TODO y si lo atrapan justo ahi?
+		\tadAxioma{hayPokemon?(p, moverJugador(s,j,p'))}
+		{\IF hayPokemon?(p,s) THEN
+			{\IF (distancia(p,p') $>$ 2) THEN TODO ELSE TODO FI}
+		ELSE
+			false
+		FI}
+		\tadAxioma{hayPokemon?(p, agregarPokemon(s,pk,p'))}{\IF p = p' THEN true ELSE hayPokemon?(p,s) FI}
+		
+		\tadAxioma{pokemonEnPos(p, registrarJugador(s,j))}{pokemonEnPos(p,s)}
+		\tadAxioma{pokemonEnPos(p, conectarJugador(s,j,p'))}{pokemonEnPos(p,s)}
+		\tadAxioma{pokemonEnPos(p, desconectarJugador(s,j))}{pokemonEnPos(p,s)}
+		\tadAxioma{pokemonEnPos(p, moverJugador(s,j,p'))}{pokemonEnPos(p,s)}
+		\tadAxioma{pokemonEnPos(p, agregarPokemon(s,pk,p'))}{\IF p = p' THEN pk ELSE pokemonEnPos(p,s) FI}
+
+		\tadAxioma{eliminado?(j,s)}{sancionesJugador(j,s) = 5}
+
+		% TODO division de Nats
+		\tadAxioma{rareza(pk, s)}{100 - 100 $\times$ (cantidadPokemonsDeTipo(pk) / cantidadPokemons(s))}
+
+		% TODO jugadores no eliminados
+		\tadAxioma{cantidadPokemons(s)}{cantidadPokemonsEnPosiciones(posiciones(mapa(s)),s) + cantidadPokemonsAtrapadosPorJugadores(jugadores(s),s)}
+
+		\tadAxioma{cantidadPokemonsEnPosiciones(ps, s)}
+		{\IF vacio?(ps) THEN 0
+		ELSE
+			cantidadPokemonsEnPosiciones(sinUno(ps),s) + {\IF hayPokemon?(dameUno(ps),s) THEN
+				1
+			ELSE
+				0
+			FI}
+		FI}
+
+		\tadAxioma{cantidadPokemonsAtrapadosPorJugadores(js, s)}
+		{\IF vacio?(js) THEN 0
+		ELSE
+			cantidadPokemonsAtrapadosPorJugadores(sinUno(js),s) + $\#$(pokemonsCapturados(dameUno(js),s))
+		FI}
+
+
+		% TODO jugadores no eliminados
+		\tadAxioma{cantidadPokemonsDeTipo(pk, s)}{cantidadPokemonsDeTipoEnPosiciones(pk, posiciones(mapa(s)), s) + cantidadPokemonsDeTipoAtrapadosPorJugadores(pk, jugadores(s), s)}
+
+		\tadAxioma{cantidadPokemonsDeTipoEnPosiciones(pk, ps, s)}
+		{\IF vacio?(ps) THEN 0
+		ELSE
+			cantidadPokemonsDeTipoEnPosiciones(pk, sinUno(ps),s) + {\IF hayPokemon?(dameUno(ps),s) $\yluego$ pokemonEnPos(dameUno(ps), s) = pk THEN
+				1
+			ELSE
+				0
+			FI}
+		FI}
+
+		\tadAxioma{cantidadPokemonsDeTipoAtrapadosPorJugadores(pk, js, s)}
+		{\IF vacio?(js) THEN 0
+		ELSE
+			cantidadPokemonsDeTipoAtrapadosPorJugadores(pk, sinUno(js),s) + cantidadPokemonsDeTipoEnConjunto(pk, pokemonsCapturados(dameUno(js), s))
+		FI}
+
+		\tadAxioma{cantidadPokemonsDeTipoEnConjunto(pk, pks)}
+		{\IF vacio?(pks) THEN 0
+		ELSE
+			cantidadPokemonsDeTipoEnConjunto(pk, sinUno(pks)) + {\IF dameUno(pks) = pk THEN
+				1
+			ELSE
+				0
+			FI}
+		FI}
+
+\end{tad}
