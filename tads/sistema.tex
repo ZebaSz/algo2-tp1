@@ -107,7 +107,7 @@
 
 		% TODO division de Nats
 		% TODO jugadores no eliminados
-		\tadAxioma{rareza(pk, s)}{100 - 100 $\times$ $\frac{\#filtrarPokemons(pk,todosLosPokemons(s))}{\#todosLosPokemons(s))}$}
+		\tadAxioma{rareza(pk, s)}{100 - 100 $\times$ $\frac{\#(pk,todosLosPokemons(s))}{\#todosLosPokemons(s))}$}
 
 		\tadAxioma{todosLosPokemons(s)}{pokemonsEnArea(posiciones(mapa(s)),s) $\cup$ pokemonsCapturadosPorGrupo(jugadores(s),s)}
 
@@ -127,17 +127,6 @@
 			$\emptyset$
 		ELSE
 			pokemonsCapturados(dameUno(js), s) $\cup$ pokemonsCapturadosPorGrupo(sinUno(js), s)
-		FI}
-
-		\tadAxioma{filtrarPokemons(pk, pks)}
-		{\IF vacio?(pks) THEN
-			$\emptyset$
-		ELSE
-			{\IF dameUno(pks) = pk THEN
-				Ag(pk,filtrarPokemons(sinUno(pks)))
-			ELSE
-				filtrarPokemons(sinUno(pks))
-			FI}
 		FI}
 
 \end{tad}
