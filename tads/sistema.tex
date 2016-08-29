@@ -107,7 +107,7 @@
 
 		% TODO division de Nats
 		% TODO jugadores no eliminados
-		\tadAxioma{rareza(pk, s)}{100 - 100 $\times$ $\frac{\#(pk,todosLosPokemons(s))}{\#todosLosPokemons(s))}$}
+		\tadAxioma{rareza(pk, s)}{100 - 100 $\times$ $\frac{\#(pk,todosLosPokemons(s))}{\#(todosLosPokemons(s))}$}
 
 		\tadAxioma{todosLosPokemons(s)}{pokemonsEnArea(posiciones(mapa(s)),s) $\cup$ pokemonsCapturadosPorGrupo(jugadores(s),s)}
 
