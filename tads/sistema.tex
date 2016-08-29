@@ -44,12 +44,9 @@
 		% TODO si no hay ningun de ese pokemon?
 		\tadOperacion{rareza}{pokemon/pk, sistema/s}{nat}{}
 
-		\tadOperacion{cantidadPokemons}{sistema/s}{nat}{}
-
 		\tadOperacion{todosLosPokemons}{sistema}{multiconj(pokemon)}{}
 		\tadOperacion{pokemonsEnArea}{conj(posicion)/ps, sistema/s}{multiconj(pokemon)}{ps $\subseteq$ posiciones(mapa(s))}
 		\tadOperacion{pokemonsCapturadosPorGrupo}{conj(jugador)/js, sistema/s}{multiconj(pokemon)}{js $\subseteq$ jugadores(s)}
-		\tadOperacion{filtrarPokemons}{pokemon, multiconj(pokemon)}{multiconj(pokemon)}{}
 
 
 
