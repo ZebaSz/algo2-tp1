@@ -47,6 +47,8 @@
 		\tadOperacion{todosLosPokemons}{sistema}{multiconj(pokemon)}{}
 		\tadOperacion{pokemonsEnArea}{conj(posicion)/ps, sistema/s}{multiconj(pokemon)}{ps $\subseteq$ posiciones(mapa(s))}
 		\tadOperacion{pokemonsCapturadosPorGrupo}{conj(jugador)/js, sistema/s}{multiconj(pokemon)}{js $\subseteq$ jugadores(s)}
+		
+		\tadOperacion{distancia}{posicion, posicion}{nat}{}
 
 
 
@@ -104,6 +106,7 @@
 
 		% TODO division de Nats
 		% TODO jugadores no eliminados
+		% TODO restringir rareza para no poder dividir por 0
 		\tadAxioma{rareza(pk, s)}{100 - 100 $\times$ $\frac{\#(pk,todosLosPokemons(s))}{\#(todosLosPokemons(s))}$}
 
 		\tadAxioma{todosLosPokemons(s)}{pokemonsEnArea(posiciones(mapa(s)),s) $\cup$ pokemonsCapturadosPorGrupo(jugadores(s),s)}
@@ -125,5 +128,13 @@
 		ELSE
 			pokemonsCapturados(dameUno(js), s) $\cup$ pokemonsCapturadosPorGrupo(sinUno(js), s)
 		FI}
+		
+		
+		
+		\tadAxioma{distancia(p,p')}{}
+		
+		\tadAxioma{n $\div$ m}{\IF n $<$ m THEN 0 ELSE 1 + ( (n-m) $\div$ m) FI}
+		
+		
 
 \end{tad}
