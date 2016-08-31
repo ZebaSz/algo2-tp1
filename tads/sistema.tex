@@ -131,12 +131,21 @@
 		
 		
 		
-		\tadAxioma{distancia(p,p')}{}
+		\tadAxioma{distancia(p,p')}
+		{\IF $\pi_1$(p) $<$ $\pi_1$(p')  THEN
+			distancia( $\langle\pi_1$(p'), $\pi_2$(p)$\rangle$ , $\langle\pi_1$(p), $\pi_2$(p')$\rangle$)
+		ELSE
+			{\IF $\pi_2$(p) $<$ $\pi_2$(p') THEN
+				distancia( $\langle\pi_1$(p), $\pi_2$(p')$\rangle$, $\langle\pi_1$(p'), $\pi_2$(p)$\rangle$)
+			ELSE
+				raiz((($\pi_1$(p) - $\pi_1$(p')) $\times$ ($\pi_1$(p) - $\pi_1$(p'))) + (($\pi_2$(p) - 		$\pi_2$(p')) $\times$ ($\pi_2$(p) - $\pi_2$(p'))))
+			FI}
+		FI}
 		
 		\tadAxioma{n $\div$ m}{\IF n $<$ m THEN 0 ELSE 1 + ( (n-m) $\div$ m) FI}
 		
 		\tadAxioma{raiz(n)}{encontrarRaiz(n,n)}
-		
+		%TODO verificar bien los casos de 0 para restricciones
 		\tadAxioma{encontrarRaiz(n,m)}{\IF n $<$ m $\times$ m THEN encontrarRaiz(n, pred(m)) ELSE m FI}
 		
 
