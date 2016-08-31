@@ -135,6 +135,9 @@
 		
 		\tadAxioma{n $\div$ m}{\IF n $<$ m THEN 0 ELSE 1 + ( (n-m) $\div$ m) FI}
 		
+		\tadAxioma{raiz(n)}{encontrarRaiz(n,n)}
+		
+		\tadAxioma{encontrarRaiz(n,m)}{\IF n $<$ m $\times$ m THEN encontrarRaiz(n, pred(m)) ELSE m FI}
 		
 
 \end{tad}
