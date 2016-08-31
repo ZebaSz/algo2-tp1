@@ -80,24 +80,42 @@
 		\tadAxioma{posicionJugador(j, moverJugador(s,j',p))}{\IF j = j' THEN p ELSE posicionJugador(j,s) FI}
 		\tadAxioma{posicionJugador(j, agregarPokemon(s,pk,p))}{posicionJugador(j,s)}
 
-		\tadAxioma{pokemonsCapturados(j, registrarJugador(s,j'))}{\IF j = j' THEN 0 ELSE pokemonsCapturados(j,s) FI}
+		\tadAxioma{pokemonsCapturados(j, registrarJugador(s,j'))}{\IF j = j' THEN $\emptyset$ ELSE pokemonsCapturados(j,s) FI}
 		\tadAxioma{pokemonsCapturados(j, conectarJugador(s,j',p))}{pokemonsCapturados(j,s)}
 		\tadAxioma{pokemonsCapturados(j, desconectarJugador(s,j'))}{pokemonsCapturados(j,s)}
-		\tadAxioma{pokemonsCapturados(j, moverJugador(s,j',p))}
-		{\IF j = j' $\land$ (10 $\leq$ distancia(p, posicionJugador(j,s)) $\lor$ ($\neg$conexion?(p, posicionJugador(j,s), mapa(s)))) THEN 
-			1 +	pokemonsCapturados(j,s)
-		ELSE pokemonsCapturados(j,s) FI}
+		%TODO REVISAR EL CASO QUE EN EL MOVIMIENTO SE ELIMINE EL TIPO, HACER JUGADORES CONECTADOS
+		\tadAxioma{pokemonsCapturados(j, moverJugador(s,j',p))}{pokemonsACapturar(j, posiciones(mapa(s)), moverJugador(s,j',p)) $\cup$ pokemonsCapturados(j,s)}
+
 		\tadAxioma{pokemonsCapturados(j, agregarPokemon(s,pk,p))}{pokemonsCapturados(j,s)}
 
 
-		\tadAxioma{}
 
+		\tadAxioma{pokemonsACapturar(j, ps, s)}
+		{\IF vacio?(ps) THEN
+			$\emptyset$
+		ELSE
+			{\IF hayPokemon?(dameUno(ps), s) $\land$ $\neg\emptyset$?(jugadoresDisponiblesACapturar(js, dameUno(ps), s)) $\yluego$ j = dameUno(jugadoresDisponiblesACapturar(js, dameUno(ps), s)) THEN
+				Ag(pokemonEnPos(ps, s), pokemonsACapturar(sinUno(js, p, s)))
+			ELSE
+				pokemonsACapturar(j, sinUno(ps), s)
+			FI}			
+		FI}
 
+		\tadAxioma{jugadoresDisponiblesACapturar(js, p, s)}
+		{\IF vacio?(js) THEN
+			$\emptyset$
+		ELSE
+			{\IF movimientosCercaDePos(dameUno(js), s) = 10 THEN
+				Ag(dameUno(js), jugadoresDisponiblesACapturar(sinUno(js, p, s)))
+			ELSE
+				jugadoresDisponiblesACapturar(sinUno(js, p, s))
+			FI}
+		FI}
 
 		\tadAxioma{movimientosCercaDePos(j, p, registrarJugador(s,j'))}{\IF j = j' THEN 0 ELSE movimientosCercaDePos(j, p, s) FI}
 		\tadAxioma{movimientosCercaDePos(j, p, conectarJugador(s,j',p'))}{\IF j = j' THEN 0 ELSE movimientosCercaDePos(j, p, s) FI}
 		\tadAxioma{movimientosCercaDePos(j, p, desconectarJugador(s,j'))}{\IF j = j' THEN 0 ELSE movimientosCercaDePos(j, p, s) FI}
-		\tadAxioma{movimientosCercaDePos(j, p, agregarPokemon(s,pk,p'))}{movimientosCercaDePos(j, p, s)}
+		\tadAxioma{movimientosCercaDePos(j, p, agregarPokemon(s,pk,p'))}{\IF p = p' THEN 0 ELSE movimientosCercaDePos(j, p, s) FI}
 
 		\tadAxioma{movimientosCercaDePos(j, p, moverJugador(s,j',p'))}
 		{\IF distancia(p, posicionJugador(j, s)) $\leq$ 2 THEN
