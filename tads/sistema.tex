@@ -8,20 +8,17 @@
 	\tadGeneradores
 		\tadAlinearFunciones{desconectarJugador~}{sistema/s, jugador/j, posicion/p}
 
-		\tadOperacion{crearSistema}{mapa}{sistema}{}
+		\tadOperacion{crearSistema}{mapa/m}{sistema}{}
 
-		% TODO entra desconectado, sin pos o pos default?
 		\tadOperacion{registrarJugador}{sistema/s, jugador/j}{sistema}{$\neg$ j $\in$ jugadores(s)}
 
 		\tadOperacion{conectarJugador}{sistema/s, jugador/j, posicion/p}{sistema}{(j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s)  $\yluego \neg$conectado?(j,s)) $\land$ p $\in$ posiciones(mapa(s))}
 		\tadOperacion{desconectarJugador}{sistema/s, jugador/j}{sistema}{j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s)  $\yluego$ conectado?(j,s)}
 
-		% TODO movimientos validos
-		% TODO jugadores compartiendo posiciones entre si y con pokemons?
+		
 		\tadOperacion{moverJugador}{sistema/s, jugador/j, posicion/p}{sistema}{(j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s)  $\yluego$conectado?(j,s)) $\land$ p $\in$ posiciones(mapa(s))}
 
-		% TODO distancia con otros pokemons
-		\tadOperacion{agregarPokemon}{sistema/s, pokemon, posicion/p}{sistema}{p $\in$ posiciones(mapa(s))}
+		\tadOperacion{agregarPokemon}{sistema/s, pokemon, posicion/p}{sistema}{p $\in$ posiciones(mapa(s)) $\yluego$ ($\neg$(hayPokemon?(p, s)) $\land$ pokemonsCerca?(p, posiciones(mapa(s)), s))}
 		
 	\tadObservadores
 		\tadAlinearFunciones{pokemonsCapturados~}{jugador/j, sistema/s}
@@ -33,23 +30,31 @@
 		\tadOperacion{posicionJugador}{jugador/j, sistema/s}{posicion}{j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s) $\yluego$conectado(j,s)}
 		\tadOperacion{sancionesJugador}{jugador/j, sistema/s}{nat}{j $\in$ jugadores(s)}
 		\tadOperacion{pokemonsCapturados}{jugador/j, sistema/s}{multiconj(pokemon)}{j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s)}
-
 		\tadOperacion{hayPokemon?}{posicion/p, sistema/s}{bool}{p $\in$ posiciones(mapa(s))}
 		\tadOperacion{pokemonEnPos}{posicion/p, sistema/s}{pokemon}{p $\in$ posiciones(mapa(s)) $\yluego$ hayPokemon?(p,s)}
+		\tadOperacion{movsLejosDePos}{jugador/j, posicion/p, sistema/s}{nat}{j $\in$ jugadoresConectados(jugadores(s)), p $\in$ posiciones(mapa(s))}
 
 	\tadOtrasOperaciones
 		\tadAlinearFunciones{pokemonsCapturadosPorGrupo~}{pokemon, multiconj(pokemon)}
 		\tadOperacion{eliminado?}{jugador/j, sistema/s}{bool}{j $\in$ jugadores(s)}
 
-		% TODO si no hay ningun de ese pokemon?
-		\tadOperacion{rareza}{pokemon/pk, sistema/s}{nat}{}
+		\tadOperacion{rareza}{pokemon/pk, sistema/s}{nat}{0 $<$ $\#$todosLosPokemons(s)}
 
 		\tadOperacion{todosLosPokemons}{sistema}{multiconj(pokemon)}{}
 		\tadOperacion{pokemonsEnArea}{conj(posicion)/ps, sistema/s}{multiconj(pokemon)}{ps $\subseteq$ posiciones(mapa(s))}
 		\tadOperacion{pokemonsCapturadosPorGrupo}{conj(jugador)/js, sistema/s}{multiconj(pokemon)}{js $\subseteq$ jugadores(s)}
 		
 		\tadOperacion{distancia}{posicion, posicion}{nat}{}
+		
+		\tadOperacion{\argumento $\div$ \argumento}{nat/n, nat/m}{nat}{0 $<$ m}
+		\tadOperacion{raizCuadrada}{nat}{nat}{}
+		\tadOperacion{encontrarRaiz}{nat/n, nat/m}{nat}{m $\leq$ n}
+		
+		\tadOperacion{capturaPokemon?}{jugador/j, posiciones/ps, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ ps $\subseteq$ posiciones(mapa(s))}
+		\tadOperacion{pokemonACapturar}{jugador/j, posiciones/ps, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ ps $\subseteq$ posiciones(mapa(s))}
+		\tadOperacion{jugadoresConectados}{conj(jugador)/js, sistema/s}{conj(jugador)}{js $\subseteq$ jugadores(s)} 
 
+		\tadOperacion{pokemonsCerca?}{posicion/p, posiciones/ps, sistema/s}{bool}{p $\in$ posiciones(mapa(s)) $\land$ ps $\subseteq$ posiciones(mapa(s))}
 
 
 	\tadAxiomas
@@ -67,6 +72,17 @@
 		\tadAxioma{jugadores(moverJugador(s,j,p))}{jugadores(s)}
 		\tadAxioma{jugadores(agregarPokemon(s,pk,p))}{jugadores(s)}
 		
+		\tadAxioma{jugadoresConectados(js, s)}
+		{\IF vacio?(js) THEN
+			 $\emptyset$
+		ELSE
+			{\IF $\neg$eliminado?(dameUno(js)) $\yluego$ conectado?(dameUno(js)) THEN
+				Ag(dameUnos(js), jugadoresConectados(sinUno(js), s))
+			ELSE
+				jugadoresConectados(sinUno(js), s)
+			FI}
+		FI}
+		
 		\tadAxioma{conectado?(j, registrarJugador(s,j'))}{\IF j = j' THEN false ELSE conectado?(j,s) FI}
 		\tadAxioma{conectado?(j, conectarJugador(s,j',p))}{\IF j = j' THEN true ELSE conectado?(j,s) FI}
 		\tadAxioma{conectado?(j, desconectarJugador(s,j'))}{\IF j = j' THEN false ELSE conectado?(j,s) FI}
@@ -76,64 +92,71 @@
 		\tadAxioma{posicionJugador(j, registrarJugador(s,j'))}{posicionJugador(j,s)}
 		\tadAxioma{posicionJugador(j, conectarJugador(s,j',p))}{\IF j = j' THEN p ELSE posicionJugador(j,s) FI}
 		\tadAxioma{posicionJugador(j, desconectarJugador(s,j'))}{posicionJugador(j,s)}
-		% TODO y si se elimina?
 		\tadAxioma{posicionJugador(j, moverJugador(s,j',p))}{\IF j = j' THEN p ELSE posicionJugador(j,s) FI}
 		\tadAxioma{posicionJugador(j, agregarPokemon(s,pk,p))}{posicionJugador(j,s)}
 
 		\tadAxioma{pokemonsCapturados(j, registrarJugador(s,j'))}{\IF j = j' THEN $\emptyset$ ELSE pokemonsCapturados(j,s) FI}
 		\tadAxioma{pokemonsCapturados(j, conectarJugador(s,j',p))}{pokemonsCapturados(j,s)}
 		\tadAxioma{pokemonsCapturados(j, desconectarJugador(s,j'))}{pokemonsCapturados(j,s)}
-		%TODO REVISAR EL CASO QUE EN EL MOVIMIENTO SE ELIMINE EL TIPO, HACER JUGADORES CONECTADOS
-		\tadAxioma{pokemonsCapturados(j, moverJugador(s,j',p))}{pokemonsACapturar(j, posiciones(mapa(s)), moverJugador(s,j',p)) $\cup$ pokemonsCapturados(j,s)}
-
 		\tadAxioma{pokemonsCapturados(j, agregarPokemon(s,pk,p))}{pokemonsCapturados(j,s)}
-
-
-
-		\tadAxioma{pokemonsACapturar(j, ps, s)}
-		{\IF vacio?(ps) THEN
-			$\emptyset$
+		\tadAxioma{pokemonsCapturados(j, moverJugador(s,j',p))}
+		{\IF conectado?(j) $\yluego$ capturaPokemon?(j, posiciones(mapa(s)), moverJugador(s,j',p)) THEN
+			Ag(pokemonACapturar(j, posiciones(mapa(s)), moverJugador(s,j',p)), pokemonesCapturados(j, s))
 		ELSE
-			{\IF hayPokemon?(dameUno(ps), s) $\land$ $\neg\emptyset$?(jugadoresDisponiblesACapturar(js, dameUno(ps), s)) $\yluego$ j = dameUno(jugadoresDisponiblesACapturar(js, dameUno(ps), s)) THEN
-				Ag(pokemonEnPos(ps, s), pokemonsACapturar(sinUno(js, p, s)))
+			pokemonesCapturados(j, s)
+		FI}
+
+		\tadAxioma{capturaPokemon?(j, ps, s)}
+		{\IF vacio?(ps) THEN
+			false
+		ELSE
+			{\IF hayPokemon?(dameUno(ps), s) $\land$ distancia(posicionJugador(j, s), dameUno(ps)) $\leq$ 2 THEN
+				$\neg\emptyset$?(jugadoresDisponiblesACapturar(jugadoresConectados(s), dameUno(ps), s)) $\yluego$ j = dameUno(jugadoresDisponiblesACapturar(jugadoresConectados(s), dameUno(ps), s))
 			ELSE
-				pokemonsACapturar(j, sinUno(ps), s)
-			FI}			
+				capturaPokemon?(j, sinUno(ps), s)
+			FI}
+		FI}
+		
+		\tadAxioma{pokemonACapturar(j, ps, s)}
+		{\IF hayPokemon?(dameUno(ps), s) $\land$ distancia(posicionJugador(j, s), dameUno(ps)) $\leq$ 2 THEN
+			pokemonEnPos(dameUno(ps), s)
+		ELSE
+			capturaPokemon?(j, sinUno(ps), s)
 		FI}
 
 		\tadAxioma{jugadoresDisponiblesACapturar(js, p, s)}
 		{\IF vacio?(js) THEN
 			$\emptyset$
 		ELSE
-			{\IF movimientosCercaDePos(dameUno(js), s) = 10 THEN
+			{\IF movsLejosDePos(dameUno(js), s) = 10 THEN
 				Ag(dameUno(js), jugadoresDisponiblesACapturar(sinUno(js, p, s)))
 			ELSE
 				jugadoresDisponiblesACapturar(sinUno(js, p, s))
 			FI}
 		FI}
 
-		\tadAxioma{movimientosCercaDePos(j, p, registrarJugador(s,j'))}{\IF j = j' THEN 0 ELSE movimientosCercaDePos(j, p, s) FI}
-		\tadAxioma{movimientosCercaDePos(j, p, conectarJugador(s,j',p'))}{\IF j = j' THEN 0 ELSE movimientosCercaDePos(j, p, s) FI}
-		\tadAxioma{movimientosCercaDePos(j, p, desconectarJugador(s,j'))}{\IF j = j' THEN 0 ELSE movimientosCercaDePos(j, p, s) FI}
-		\tadAxioma{movimientosCercaDePos(j, p, agregarPokemon(s,pk,p'))}{\IF p = p' THEN 0 ELSE movimientosCercaDePos(j, p, s) FI}
+		\tadAxioma{movsLejosDePos(j, p, registrarJugador(s,j'))}{\IF j = j' THEN 0 ELSE movsLejosDePos(j, p, s) FI}
+		\tadAxioma{movsLejosDePos(j, p, conectarJugador(s,j',p'))}{\IF j = j' THEN 0 ELSE movsLejosDePos(j, p, s) FI}
+		\tadAxioma{movsLejosDePos(j, p, desconectarJugador(s,j'))}{\IF j = j' THEN 0 ELSE movsLejosDePos(j, p, s) FI}
+		\tadAxioma{movsLejosDePos(j, p, agregarPokemon(s,pk,p'))}{\IF p = p' THEN 0 ELSE movsLejosDePos(j, p, s) FI}
 
-		\tadAxioma{movimientosCercaDePos(j, p, moverJugador(s,j',p'))}
+		\tadAxioma{movsLejosDePos(j, p, moverJugador(s,j',p'))}
 		{\IF distancia(p, posicionJugador(j, s)) $\leq$ 2 THEN
 			{\IF j = j' THEN
 				{\IF distancia(p, p') $\leq$ 2 THEN
-					movimientosCercaDePos(j, p ,s)
+					movsLejosDePos(j, p ,s)
 				ELSE
 					0
 				FI}
 			ELSE
 				{\IF distancia(p, p') $\leq$ 2 THEN
 					{\IF distancia(p, posicionJugador(j', s)) $\leq$ 2 THEN
-						movimientosCercaDePos(j, p ,s)
+						movsLejosDePos(j, p ,s)
 					ELSE
 						0
 					FI}
 				ELSE
-					1 + movimientosCercaDePos(j, p ,s)
+					1 + movsLejosDePos(j, p ,s)
 				FI}
 			FI}
 		ELSE
@@ -154,34 +177,62 @@
 		ELSE sancionesJugador(j,s) FI}
 		\tadAxioma{sancionesJugador(j, agregarPokemon(s,pk,p))}{sancionesJugador(j,s)}
 
-		% TODO sancionJugador
-		% TODO pokemonsCapturados
 
 		\tadAxioma{hayPokemon?(p, crearSistema(m))}{false}
 		\tadAxioma{hayPokemon?(p, registrarJugador(s,j))}{hayPokemon?(p,s)}
 		\tadAxioma{hayPokemon?(p, conectarJugador(s,j,p'))}{hayPokemon?(p,s)}
 		\tadAxioma{hayPokemon?(p, desconectarJugador(s,j))}{hayPokemon?(p,s)}
-		% TODO y si lo atrapan justo ahi?
 		\tadAxioma{hayPokemon?(p, moverJugador(s,j,p'))}
 		{\IF hayPokemon?(p,s) THEN
-			{\IF (distancia(p,p') $>$ 2) THEN TODO ELSE TODO FI}
+			$\neg$alguienCapturaPokemon(jugadoresConectados(s), p, moverJugador(s,j,p'))
 		ELSE
 			false
 		FI}
 		\tadAxioma{hayPokemon?(p, agregarPokemon(s,pk,p'))}{\IF p = p' THEN true ELSE hayPokemon?(p,s) FI}
 		
+		\tadAxioma{alguienCapturaPokemon(js, p, s)}
+		{\IF vacio?(js) THEN
+			false
+		ELSE
+			{\IF capturaPokemon?(dameUno(js), p, s) THEN
+				true
+			ELSE
+				capturaPokemon?(sinUno(js), p, s)
+			FI}
+		FI}
+
+
 		\tadAxioma{pokemonEnPos(p, registrarJugador(s,j))}{pokemonEnPos(p,s)}
 		\tadAxioma{pokemonEnPos(p, conectarJugador(s,j,p'))}{pokemonEnPos(p,s)}
 		\tadAxioma{pokemonEnPos(p, desconectarJugador(s,j))}{pokemonEnPos(p,s)}
 		\tadAxioma{pokemonEnPos(p, moverJugador(s,j,p'))}{pokemonEnPos(p,s)}
 		\tadAxioma{pokemonEnPos(p, agregarPokemon(s,pk,p'))}{\IF p = p' THEN pk ELSE pokemonEnPos(p,s) FI}
 
+		\tadAxioma{pokemonsCerca?(p, ps, s)}
+		{\IF vacio?(ps - p) THEN
+			false
+		ELSE
+			{\IF distancia(p, dameUno(ps - p)) $<$ 10 $\land$ hayPokemon?(dameUno(ps - p), s) THEN
+				false
+			ELSE
+				pokemonsCerca?(p, Ag(p, sinUno(ps - p)), s)
+			FI}
+		FI}
+
+		\tadAxioma{pokemonsCerca?(p, ps, s)}
+		{\IF vacio?(ps) THEN
+			false
+		ELSE
+			{\IF $\neg$(p = dameUno(ps)) $\land$ distancia(p, dameUno(ps)) $<$ 5 $\land$ hayPokemon?(dameUno(ps), s) THEN
+				false
+			ELSE
+				pokemonsCerca?(p, sinUno(ps), s)
+			FI}
+		FI}
+
 		\tadAxioma{eliminado?(j,s)}{sancionesJugador(j,s) = 5}
 
-		% TODO division de Nats
-		% TODO jugadores no eliminados
-		% TODO restringir rareza para no poder dividir por 0
-		\tadAxioma{rareza(pk, s)}{100 - 100 $\times$ $\frac{\#(pk,todosLosPokemons(s))}{\#(todosLosPokemons(s))}$}
+		\tadAxioma{rareza(pk, s)}{100 - 100 $\times$ ($\#$(pk,todosLosPokemons(s)) $\div$ $\#$(todosLosPokemons(s)))}
 
 		\tadAxioma{todosLosPokemons(s)}{pokemonsEnArea(posiciones(mapa(s)),s) $\cup$ pokemonsCapturadosPorGrupo(jugadores(s),s)}
 
@@ -200,7 +251,11 @@
 		{\IF vacio?(js) THEN
 			$\emptyset$
 		ELSE
-			pokemonsCapturados(dameUno(js), s) $\cup$ pokemonsCapturadosPorGrupo(sinUno(js), s)
+			{\IF eliminado?(dameUno(js)) THEN
+				pokemonsCapturadosPorGrupo(sinUno(js), s)
+			ELSE
+				pokemonsCapturados(dameUno(js), s) $\cup$ pokemonsCapturadosPorGrupo(sinUno(js), s)
+			FI}
 		FI}
 		
 		
@@ -219,7 +274,6 @@
 		\tadAxioma{n $\div$ m}{\IF n $<$ m THEN 0 ELSE 1 + ( (n-m) $\div$ m) FI}
 		
 		\tadAxioma{raiz(n)}{encontrarRaiz(n,n)}
-		%TODO verificar bien los casos de 0 para restricciones
 		\tadAxioma{encontrarRaiz(n,m)}{\IF n $<$ m $\times$ m THEN encontrarRaiz(n, pred(m)) ELSE m FI}
 		
 
