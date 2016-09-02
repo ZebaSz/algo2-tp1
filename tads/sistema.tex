@@ -21,7 +21,7 @@
 		\tadOperacion{agregarPokemon}{sistema/s, pokemon, posicion/p}{sistema}{p $\in$ posiciones(mapa(s)) $\yluego$ ($\neg$(hayPokemon?(p, s)) $\land$ pokemonsCerca?(p, posiciones(mapa(s)), s))}
 		
 	\tadObservadores
-		\tadAlinearFunciones{pokemonsCapturados~}{jugador/j, sistema/s}
+		\tadAlinearFunciones{pokemonsCapturados~}{jugador/j, posicion/p, sistema/s}
 
 		\tadOperacion{mapa}{sistema}{mapa}{}
 
@@ -35,7 +35,7 @@
 		\tadOperacion{movsLejosDePos}{jugador/j, posicion/p, sistema/s}{nat}{j $\in$ jugadoresConectados(jugadores(s)), p $\in$ posiciones(mapa(s))}
 
 	\tadOtrasOperaciones
-		\tadAlinearFunciones{pokemonsCapturadosPorGrupo~}{pokemon, multiconj(pokemon)}
+		\tadAlinearFunciones{pokemonsCapturadosPorGrupo~}{jugador/j, posiciones/ps, sistema/s}
 		\tadOperacion{eliminado?}{jugador/j, sistema/s}{bool}{j $\in$ jugadores(s)}
 
 		\tadOperacion{rareza}{pokemon/pk, sistema/s}{nat}{0 $<$ $\#$todosLosPokemons(s)}
@@ -55,7 +55,6 @@
 		\tadOperacion{jugadoresConectados}{conj(jugador)/js, sistema/s}{conj(jugador)}{js $\subseteq$ jugadores(s)} 
 
 		\tadOperacion{pokemonsCerca?}{posicion/p, posiciones/ps, sistema/s}{bool}{p $\in$ posiciones(mapa(s)) $\land$ ps $\subseteq$ posiciones(mapa(s))}
-
 
 	\tadAxiomas
 		\tadAxioma{mapa(crearSistema(m))}{m}
@@ -101,9 +100,9 @@
 		\tadAxioma{pokemonsCapturados(j, agregarPokemon(s,pk,p))}{pokemonsCapturados(j,s)}
 		\tadAxioma{pokemonsCapturados(j, moverJugador(s,j',p))}
 		{\IF conectado?(j) $\yluego$ capturaPokemon?(j, posiciones(mapa(s)), moverJugador(s,j',p)) THEN
-			Ag(pokemonACapturar(j, posiciones(mapa(s)), moverJugador(s,j',p)), pokemonesCapturados(j, s))
+			Ag(pokemonACapturar(j, posiciones(mapa(s)), moverJugador(s,j',p)), pokemonsCapturados(j, s))
 		ELSE
-			pokemonesCapturados(j, s)
+			pokemonsCapturados(j, s)
 		FI}
 
 		\tadAxioma{capturaPokemon?(j, ps, s)}
@@ -207,17 +206,6 @@
 		\tadAxioma{pokemonEnPos(p, desconectarJugador(s,j))}{pokemonEnPos(p,s)}
 		\tadAxioma{pokemonEnPos(p, moverJugador(s,j,p'))}{pokemonEnPos(p,s)}
 		\tadAxioma{pokemonEnPos(p, agregarPokemon(s,pk,p'))}{\IF p = p' THEN pk ELSE pokemonEnPos(p,s) FI}
-
-		\tadAxioma{pokemonsCerca?(p, ps, s)}
-		{\IF vacio?(ps - p) THEN
-			false
-		ELSE
-			{\IF distancia(p, dameUno(ps - p)) $<$ 10 $\land$ hayPokemon?(dameUno(ps - p), s) THEN
-				false
-			ELSE
-				pokemonsCerca?(p, Ag(p, sinUno(ps - p)), s)
-			FI}
-		FI}
 
 		\tadAxioma{pokemonsCerca?(p, ps, s)}
 		{\IF vacio?(ps) THEN
