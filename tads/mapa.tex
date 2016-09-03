@@ -16,9 +16,11 @@
 		\tadOperacion{posiciones}{mapa}{conj(posicion)}{}
 		\tadOperacion{conexionesDirectas}{posicion/p,mapa/m}{conj(posicion)}{p $\in$ posiciones(m)}
 	\tadOtrasOperaciones
-		\tadAlinearFunciones{conexion~}{posicion/p1, posicion/p2, mapa/m}
+		\tadAlinearFunciones{hayAlgunaConexion~}{posicion/p, conj(posiciones)/c, mapa/m}
 		
 		\tadOperacion{conexion?}{posicion/p1, posicion/p2, mapa/m}{bool}{p1 $\in$ posiciones(m) $\land$ p2 $\in$ posiciones(m)}
+		
+		\tadOperacion{hayAlgunaConexion?}{posicion/p, conj(posiciones)/c, mapa/m}{bool}{p $\in$ posiciones(m) $\land$ c $\subseteq$ posiciones(m)}
 	\tadAxiomas
 		
 		
@@ -41,19 +43,24 @@
 			{\IF vacio?(c) THEN
 				false
 			ELSE 
-				p2 $\in$ c $\lor$ conexion?(dameUno(c),p2, m) $\lor$ conexion?(p1, p2, AgregarPos(e, sinUno(c), m))
+				p2 $\in$ c $\lor$ hayAlgunaConexion?(p2, c, m)
 			FI}
 		ELSE
 			{\IF p2 = e THEN
 				{\IF vacio?(c) THEN
 					false
 				ELSE 
-					p1 $\in$ c $\lor$ conexion?(p1, dameUno(c), m) $\lor$ conexion?(p1, p2, AgregarPos(e, sinUno(c), m))
+					p1 $\in$ c $\lor$ hayAlgunaConexion?(p1, c, m)
 				FI}
 			ELSE
-				conexion?(p1,p2,m)
+				conexion?(p1,p2,m) $\lor$ (hayAlgunaConexion?(p1, c, m) $\land$ hayAlgunaConexion?(p2, c, m))
 			FI}
 		FI}
 				
-
+		\tadAxioma{hayAlgunaConexion?(p, c, m)}
+		{\IF vacio?(c) THEN
+			false
+		ELSE
+			conexion?(p, dameUno(c), m) $\lor$ hayAlgunaConexion?(p, sinUno(c), m)
+		FI}
 \end{tad}
