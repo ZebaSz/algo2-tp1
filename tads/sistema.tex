@@ -212,7 +212,7 @@
 			false
 		ELSE
 			{\IF $\neg$(p = dameUno(ps)) $\land$ distancia(p, dameUno(ps)) $<$ 5 $\land$ hayPokemon?(dameUno(ps), s) THEN
-				false
+				true
 			ELSE
 				pokemonsCerca?(p, sinUno(ps), s)
 			FI}
