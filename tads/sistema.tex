@@ -134,9 +134,9 @@
 			FI}
 		FI}
 
-		\tadAxioma{movsLejosDePos(j, p, registrarJugador(s,j'))}{\IF j = j' THEN 0 ELSE movsLejosDePos(j, p, s) FI}
+		\tadAxioma{movsLejosDePos(j, p, registrarJugador(s,j'))}{movsLejosDePos(j, p, s)}
 		\tadAxioma{movsLejosDePos(j, p, conectarJugador(s,j',p'))}{\IF j = j' THEN 0 ELSE movsLejosDePos(j, p, s) FI}
-		\tadAxioma{movsLejosDePos(j, p, desconectarJugador(s,j'))}{\IF j = j' THEN 0 ELSE movsLejosDePos(j, p, s) FI}
+		\tadAxioma{movsLejosDePos(j, p, desconectarJugador(s,j'))}{movsLejosDePos(j, p, s)}
 		\tadAxioma{movsLejosDePos(j, p, agregarPokemon(s,pk,p'))}{\IF p = p' THEN 0 ELSE movsLejosDePos(j, p, s) FI}
 
 		\tadAxioma{movsLejosDePos(j, p, moverJugador(s,j',p'))}
@@ -171,7 +171,7 @@
 		\tadAxioma{sancionesJugador(j, conectarJugador(s,j',p))}{sancionesJugador(j,s)}
 		\tadAxioma{sancionesJugador(j, desconectarJugador(s,j'))}{sancionesJugador(j,s)}
 		\tadAxioma{sancionesJugador(j, moverJugador(s,j',p))}
-		{\IF j = j' $\land$ (10 $\leq$ distancia(p, posicionJugador(j,s)) $\lor$ ($\neg$conexion?(p, posicionJugador(j,s), mapa(s)))) THEN 
+		{\IF j = j' $\yluego$ (10 $\leq$ distancia(p, posicionJugador(j,s)) $\lor$ ($\neg$conexion?(p, posicionJugador(j,s), mapa(s)))) THEN 
 			1 +	sancionesJugador(j,s)
 		ELSE sancionesJugador(j,s) FI}
 		\tadAxioma{sancionesJugador(j, agregarPokemon(s,pk,p))}{sancionesJugador(j,s)}
