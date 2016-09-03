@@ -19,36 +19,36 @@
 		\tadAlinearFunciones{conexion~}{posicion/p1, posicion/p2, mapa/m}
 		
 		\tadOperacion{conexion?}{posicion/p1, posicion/p2, mapa/m}{bool}{p1 $\in$ posiciones(m) $\land$ p2 $\in$ posiciones(m)}
-	\tadAxiomas
+	\tadAxiomas[\paratodo{posicion,}{\ p, e, p1, p2} \paratodo{ conj(posicion),}{\ ps} \paratodo{mapa}{\ m}]
 		
 		
 		\tadAxioma{posiciones(vacio)}{$\emptyset$}
 		\tadAxioma{posiciones(AgregarPos(p,ps,m))}{Ag(p, posiciones(m))}
 				
-		\tadAxioma{conexionesDirectas(p, AgregarPos(e, c, m))}
+		\tadAxioma{conexionesDirectas(p, AgregarPos(e, ps, m))}
 		{\IF e = p THEN
-			c
+			ps
 		ELSE
-			{\IF p $\in$ c THEN
+			{\IF p $\in$ ps THEN
 				Ag(e,conexionesDirectas(p,m))
 			ELSE
 				conexionesDirectas(p,m)
 			FI}
 		FI}
 		
-		\tadAxioma{conexion?(p1, p2, AgregarPos(e, c, m))}
+		\tadAxioma{conexion?(p1, p2, AgregarPos(e, ps, m))}
 		{\IF p1 = e THEN
-			{\IF vacio?(c) THEN
+			{\IF vacio?(ps) THEN
 				false
 			ELSE 
-				p2 $\in$ c $\lor$ conexion?(dameUno(c),p2, m) $\lor$ conexion?(p1, p2, AgregarPos(e, sinUno(c), m))
+				p2 $\in$ c $\lor$ conexion?(dameUno(ps),p2, m) $\lor$ conexion?(p1, p2, AgregarPos(e, sinUno(ps), m))
 			FI}
 		ELSE
 			{\IF p2 = e THEN
-				{\IF vacio?(c) THEN
+				{\IF vacio?(ps) THEN
 					false
 				ELSE 
-					p1 $\in$ c $\lor$ conexion?(p1, dameUno(c), m) $\lor$ conexion?(p1, p2, AgregarPos(e, sinUno(c), m))
+					p1 $\in$ ps $\lor$ conexion?(p1, dameUno(ps), m) $\lor$ conexion?(p1, p2, AgregarPos(e, sinUno(ps), m))
 				FI}
 			ELSE
 				conexion?(p1,p2,m)
