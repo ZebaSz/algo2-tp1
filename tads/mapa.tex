@@ -32,7 +32,7 @@
 			ps
 		ELSE
 			{\IF p $\in$ ps THEN
-				Ag(e,conexionesDirectas(p,m))
+				Ag(e, conexionesDirectas(p,m))
 			ELSE
 				conexionesDirectas(p,m)
 			FI}
@@ -43,24 +43,24 @@
 			{\IF vacio?(ps) THEN
 				false
 			ELSE 
-				p2 $\in$ c $\lor$ hayAlgunaConexion?(p2, c, m)
+				p2 $\in$ ps $\lor$ hayAlgunaConexion?(p2, ps, m)
 			FI}
 		ELSE
 			{\IF p2 = e THEN
 				{\IF vacio?(ps) THEN
 					false
 				ELSE 
-					p1 $\in$ c $\lor$ hayAlgunaConexion?(p1, c, m)
+					p1 $\in$ ps $\lor$ hayAlgunaConexion?(p1, ps, m)
 				FI}
 			ELSE
-				conexion?(p1,p2,m) $\lor$ (hayAlgunaConexion?(p1, c, m) $\land$ hayAlgunaConexion?(p2, c, m))
+				conexion?(p1,p2,m) $\lor$ (hayAlgunaConexion?(p1, ps, m) $\land$ hayAlgunaConexion?(p2, ps, m))
 			FI}
 		FI}
 				
-		\tadAxioma{hayAlgunaConexion?(p, c, m)}
-		{\IF vacio?(c) THEN
+		\tadAxioma{hayAlgunaConexion?(p, ps, m)}
+		{\IF vacio?(ps) THEN
 			false
 		ELSE
-			conexion?(p, dameUno(c), m) $\lor$ hayAlgunaConexion?(p, sinUno(c), m)
+			conexion?(p, dameUno(ps), m) $\lor$ hayAlgunaConexion?(p, sinUno(ps), m)
 		FI}
 \end{tad}
