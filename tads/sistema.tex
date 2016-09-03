@@ -3,7 +3,7 @@
 	
 	\tadExporta{}
 	
-	\tadIgualdadObservacional{s}{s'}{sistema}{}
+	\tadIgualdadObservacional{s}{s'}{sistema}{mapa(s) \igobs mapa(s') $\land$ jugadores(s) \igobs jugadores(s') $\land$  ($\forall$ j : jugadores(s)) (sancionesJugador(j,s) \igobs sancionesJugador(j,s') $\land$ sancionesJugador(j,s) $<$ 5 $\impluego$ (conectado?(j,s) \igobs conectado?(j,s') $\land$ posicionJugador(j,s) \igobs posicionJugador(j,s') $\land$ pokemonsCapturados(j,s) \igobs pokemonsCapturados(j,s') $\land$ conectado?(j,s) $\impluego$ ($\forall$ p : posiciones(mapa(s))) (movsLejosDePos(j,p,s) \igobs movsLejosDePos(j,p,s')))) $\land$ ($\forall$ p : posiciones(mapa(s))) (hayPokemon?(p,s) \igobs hayPokemon?(p,s') $\land$ hayPokemon?(p,s) $\impluego$ pokemonEnPos(p,s) \igobs pokemonEnPos(p,s'))}
 	
 	\tadGeneradores
 		\tadAlinearFunciones{desconectarJugador~}{sistema/s, jugador/j, posicion/p}
