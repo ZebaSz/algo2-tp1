@@ -54,9 +54,9 @@
 		\tadOperacion{pokemonACapturar}{jugador/j, posiciones/ps, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ ps $\subseteq$ posiciones(mapa(s))}
 		\tadOperacion{jugadoresConectados}{conj(jugador)/js, sistema/s}{conj(jugador)}{js $\subseteq$ jugadores(s)} 
 
-		\tadOperacion{pokemonsCerca?}{posicion/p, posiciones/ps, sistema/s}{bool}{p $\in$ posiciones(mapa(s)) $\land$ ps $\subseteq$ posiciones(mapa(s))}
+		\tadOperacion{pokemonsCerca?}{posicion/p, posiciones/ps, sistema/s}{bool}{p $\in$ posiciones(mapa(s)) $\land$ ps $\subseteq$ posiciones(mapa(s))} $ \\ $
 
-	\tadAxiomas
+	\tadAxiomas [\paratodo{mapa,}{\ m} \paratodo{sistema,}{\ s} \paratodo{jugador,}{\ j, j'} \paratodo{posicion,}{\ p, p'} \paratodo{pokemon,}{\ pk} \paratodo{nat,}{\ n, m} $ \\ $\paratodo{conj(jugador),}{\ js} \paratodo{conj(posicion)}{\ ps}] $ \\ $
 		\tadAxioma{mapa(crearSistema(m))}{m}
 		\tadAxioma{mapa(registrarJugador(s,j))}{mapa(s)}
 		\tadAxioma{mapa(conectarJugador(s,j,p))}{mapa(s)}
@@ -110,7 +110,7 @@
 			false
 		ELSE
 			{\IF hayPokemon?(dameUno(ps), s) $\land$ distancia(posicionJugador(j, s), dameUno(ps)) $\leq$ 2 THEN
-				$\neg\emptyset$?(jugadoresDisponiblesACapturar(jugadoresConectados(s), dameUno(ps), s)) $\yluego$ j = dameUno(jugadoresDisponiblesACapturar(jugadoresConectados(s), dameUno(ps), s))
+				$\neg\emptyset$?(jugadoresDisponiblesACapturar(jugadoresConectados(s), dameUno(ps), s)) $\yluego$ $ \\ $ j = dameUno(jugadoresDisponiblesACapturar(jugadoresConectados(s), dameUno(ps), s))
 			ELSE
 				capturaPokemon?(j, sinUno(ps), s)
 			FI}
