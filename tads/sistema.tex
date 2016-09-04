@@ -10,10 +10,10 @@
 	(sancionesJugador(j,s) \igobs sancionesJugador(j,s') $\yluego$ \\
 	 sancionesJugador(j,s) $<$ 5 $\impluego$ \\
 	(conectado?(j,s) \igobs conectado?(j,s') $\yluego$ \\
-	conectado(j,s) $\impluego$  \\
+	conectado?(j,s) $\impluego$  \\
 	(posicionJugador(j,s) \igobs posicionJugador(j,s') $\yluego$\\
 	($\forall$ p: posiciones(mapa(s))) \\
-	(movLejosDePos(j,p,s) \igobs movLejosDePos(j,p,s'))))))}
+	(movsLejosDePos(j,p,s) \igobs movsLejosDePos(j,p,s'))))))}
 		
 	\tadGeneradores
 		\tadAlinearFunciones{desconectarJugador~}{sistema/s, jugador/j, posicion/p}
