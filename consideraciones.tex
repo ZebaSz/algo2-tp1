@@ -1,0 +1,22 @@
+- El TAD Pokemon es un String porque asumimos que lo \'unico que nos interesa saber es el tipo de pokemon.
+
+- El TAD Jugador es un Nat que se refiere a un ID entero, para poder diferenciar jugadores.
+
+- Para el TAD Mapa el enunciado nos pide saber las posiciones v\'alidas y como est\'an conectadas entre s\'i, y para esto \'ultimo supusimos que  adem\'as de saber que si dos puntos est\'an conectados, nos interesa saber si dos puntos est\'an conectados directamente, o sea que haya un camino donde no haya una posici\'on en el medio.
+As\'i diferenciamos estos casos: (Los puntos son posiciones y las l\'ineas conexiones)
+	
+En estos casos en la l\'ogica del juego de la posici\'on (1,1) el jugador se va poder mover correctamente a la posici\'on (2,1), aunque las conexiones entre s\'i sean distintas.
+
+- El TAD Sistema maneja donde se encuentra cada pokemon, y el estado de cada jugador(posici\'on, estado de conexi\'on, sanciones, pokemons capturados)
+
+- Cuando un jugador se registra est\'a desconectado
+
+- Suponemos que un jugador puede estar en la misma posici\'on que otros jugadores o pokemons
+
+- Por la decisi\'on de que el TAD Pokemon sea un string del tipo al no poder diferenciar pokemons del mismo tipo, los pokemonsCapturados los representamos con un Multiconjunto de pokemons.
+
+- MovLejosDePos es la operacion que tiene la logica de cuantos movimientos ajenos al jugador hubo fuera del rango de captura. Supusimos que si 2 jugadores estan en el rango de captura de un pokemon determinado y uno de ellos sale del rango, este movimiento cuenta para el jugador que se qued\'o en el rango.
+
+- capturaPokemon? es una operaci\'on que nos dice si el jugador atrapa un pokemon en la \'ultima acci\'on del sistema.
+
+- pokemonACapturar devuelve, si el jugador captura un pokemon, que pokemon captura. Al estar la restricci\'on de que los pokemons tienen que estar m\'inimamente a 5 de distancia y el rango de captura es de 2, el jugador solo puede atrapar un pokemon.
