@@ -1,9 +1,9 @@
 \renewcommand{\labelitemi}{\textbullet}
 \begin{itemize}
 
-\item El TAD Pokemon es String porque asumimos que lo \'unico que nos interesa saber es el tipo de pokemon. Asimismo, el TAD Jugador es Nat que se refiere a un ID entero \'unico. El resto de los detalles relacionados (como sus posiciones, conexi\'on del jugador, etc.) los maneja el TAD Sistema.
+\item El TAD Pokemon es String porque asumimos que lo \'unico que nos interesa saber es el tipo de pokemon. Asimismo, el TAD Jugador es Nat que se refiere a un ID \'unico. El resto de los detalles relacionados (como sus posiciones, conexi\'on del jugador, etc.) los maneja el TAD Sistema.
 
-\item Para el TAD Mapa el enunciado nos pide saber las posiciones v\'alidas y como est\'an conectadas entre s\'i, y para esto \'ultimo supusimos que, adem\'as de saber que si dos puntos est\'an conectados, nos interesa saber si dos puntos est\'an conectados de manera directa, es decir hay un camino entre ambos sin otras posiciones en el medio.
+\item Para el TAD Mapa el enunciado nos pide saber las posiciones v\'alidas y como est\'an conectadas entre s\'i, y para esto \'ultimo supusimos que, adem\'as de saber si dos puntos est\'an conectados, nos interesa saber si existe una conexi\'on directa entre ellos (es decir, si hay un camino entre ambos sin otras posiciones en el medio)
 
 Por ejemplo, los siguientes casos se consideran distintos mapas (los puntos son posiciones y las l\'ineas son conexiones directas):
 
@@ -16,12 +16,8 @@ Cabe destacar que esto no afecta la l\'ogica del juego, ya que los requisitos pa
 
 \item Suponemos que un jugador puede estar en la misma posici\'on que otros jugadores o un pokemon.
 
-\item Por la decisi\'on de que el TAD Pokemon sea un String del tipo al no poder diferenciar pokemons del mismo tipo, los pokemonsCapturados los representamos con un Multiconjunto de pokemons.
+\item Dado que el TAD Pokemon es String y no podemos diferenciar pokemons del mismo tipo, los pokemonsCapturados los representamos con un Multiconjunto de pokemons.
 
-\item movsLejosDePos es la operacion que tiene la logica de cuantos movimientos hubo fuera del rango de captura, que debe llegar a 10 para que suceda la captura del pokemon que se encuentra ah\'i. Supusimos que si 2 o m\'as jugadores estan en el rango de captura de un pokemon determinado y uno de ellos sale del rango, este movimiento cuenta para los jugadores que permanecen en el rango.
-
-\item capturaPokemon? es una operaci\'on que nos dice si el jugador atrapa un pokemon en la \'ultima acci\'on del sistema.
-
-\item pokemonACapturar devuelve, si el jugador captura un pokemon, que pokemon captura. Al estar la restricci\'on de que los pokemons tienen que estar m\'inimamente a 5 de distancia y el rango de captura es de 2, el jugador solo puede atrapar un pokemon.
+\item Asumimos que si 2 o m\'as jugadores estan en el rango de captura de un pokemon determinado y uno de ellos sale del rango, este movimiento cuenta para avanzar la captura del pokemon para los jugadores que permanecen en el rango.
 
 \end{itemize}
