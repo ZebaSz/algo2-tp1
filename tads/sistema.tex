@@ -3,8 +3,18 @@
 	
 	\tadExporta{}
 	
-	\tadIgualdadObservacional{s}{s'}{sistema}{mapa(s) \igobs mapa(s') $\land$ jugadores(s) \igobs jugadores(s') $\land$  ($\forall$ j : jugadores(s)) (sancionesJugador(j,s) \igobs sancionesJugador(j,s') $\land$ sancionesJugador(j,s) $<$ 5 $\impluego$ (conectado?(j,s) \igobs conectado?(j,s') $\land$ posicionJugador(j,s) \igobs posicionJugador(j,s') $\land$ pokemonsCapturados(j,s) \igobs pokemonsCapturados(j,s') $\land$ conectado?(j,s) $\impluego$ ($\forall$ p : posiciones(mapa(s))) (movsLejosDePos(j,p,s) \igobs movsLejosDePos(j,p,s')))) $\land$ ($\forall$ p : posiciones(mapa(s))) (hayPokemon?(p,s) \igobs hayPokemon?(p,s') $\land$ hayPokemon?(p,s) $\impluego$ pokemonEnPos(p,s) \igobs pokemonEnPos(p,s'))}
-	
+	\tadIgualdadObservacional{s}{s'}{sistema}
+	{mapa(s) \igobs mapa(s') $\yluego$ \\
+	($\forall$ p : posiciones(mapa(s)))(hayPokemon?(p,s)	\igobs hayPokemon?(p,s') $\land$ (hayPokemon?(p,s) $\impluego$ pokemonEnPos(p,s) \igobs pokemonEnPos(p,s'))) $\yluego$ \\
+	(jugadores(s) \igobs jugadores(s') $\yluego$ ($\forall$ j : jugadores(s)) \\
+	(sancionesJugador(j,s) \igobs sancionesJugador(j,s') $\yluego$ \\
+	 sancionesJugador(j,s) $<$ 5 $\impluego$ \\
+	(conectado?(j,s) \igobs conectado?(j,s') $\yluego$ \\
+	conectado(j,s) $\impluego$  \\
+	(posicionJugador(j,s) \igobs posicionJugador(j,s') $\yluego$\\
+	($\forall$ p: posiciones(mapa(s))) \\
+	(movLejosDePos(j,p,s) \igobs movLejosDePos(j,p,s'))))))}
+		
 	\tadGeneradores
 		\tadAlinearFunciones{desconectarJugador~}{sistema/s, jugador/j, posicion/p}
 
