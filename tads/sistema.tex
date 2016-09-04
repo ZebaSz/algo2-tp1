@@ -70,7 +70,7 @@
 		\tadAxioma{jugadores(desconectarJugador(s,j))}{jugadores(s)}
 		\tadAxioma{jugadores(moverJugador(s,j,p))}{jugadores(s)}
 		\tadAxioma{jugadores(agregarPokemon(s,pk,p))}{jugadores(s)}
-		
+			
 		\tadAxioma{jugadoresConectados(js, s)}
 		{\IF vacio?(js) THEN
 			 $\emptyset$
@@ -110,7 +110,7 @@
 			false
 		ELSE
 			{\IF hayPokemon?(dameUno(ps), s) $\land$ distancia(posicionJugador(j, s), dameUno(ps)) $\leq$ 2 THEN
-				$\neg\emptyset$?(jugadoresDisponiblesACapturar(jugadoresConectados(s), dameUno(ps), s)) $\yluego$ $ \\ $ j = dameUno(jugadoresDisponiblesACapturar(jugadoresConectados(s), dameUno(ps), s))
+				$\neg\emptyset$?(jugadoresDisponiblesACapturar(jugadoresConectados(jugadores(s), s), dameUno(ps), s)) $\yluego$ $ \\ $ j = dameUno(jugadoresDisponiblesACapturar(jugadoresConectados(jugadores(s), s), dameUno(ps), s))
 			ELSE
 				capturaPokemon?(j, sinUno(ps), s)
 			FI}
@@ -183,7 +183,7 @@
 		\tadAxioma{hayPokemon?(p, desconectarJugador(s,j))}{hayPokemon?(p,s)}
 		\tadAxioma{hayPokemon?(p, moverJugador(s,j,p'))}
 		{\IF hayPokemon?(p,s) THEN
-			$\neg$alguienCapturaPokemon(jugadoresConectados(s), p, moverJugador(s,j,p'))
+			$\neg$alguienCapturaPokemon(jugadoresConectados(jugadores(s), s), p, moverJugador(s,j,p'))
 		ELSE
 			false
 		FI}
