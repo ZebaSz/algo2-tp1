@@ -28,7 +28,7 @@
 		
 		\tadOperacion{moverJugador}{sistema/s, jugador/j, posicion/p}{sistema}{(j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s)  $\yluego$conectado?(j,s)) $\land$ p $\in$ posiciones(mapa(s))}
 
-		\tadOperacion{agregarPokemon}{sistema/s, pokemon, posicion/p}{sistema}{p $\in$ posiciones(mapa(s)) $\yluego$ ($\neg$(hayPokemon?(p, s)) $\land$ pokemonsCerca?(p, posiciones(mapa(s)), s))}
+		\tadOperacion{agregarPokemon}{sistema/s, pokemon, posicion/p}{sistema}{p $\in$ posiciones(mapa(s)) $\yluego$ ($\neg$(hayPokemon?(p, s)) $\land$ \\ pokemonsCerca?(p, posiciones(mapa(s)), s))}
 		
 	\tadObservadores
 		\tadAlinearFunciones{pokemonsCapturados~}{jugador/j, posicion/p, sistema/s}
