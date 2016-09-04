@@ -1,22 +1,27 @@
-- El TAD Pokemon es un String porque asumimos que lo \'unico que nos interesa saber es el tipo de pokemon.
+\renewcommand{\labelitemi}{\textbullet}
+\begin{itemize}
 
-- El TAD Jugador es un Nat que se refiere a un ID entero, para poder diferenciar jugadores.
+\item El TAD Pokemon es String porque asumimos que lo \'unico que nos interesa saber es el tipo de pokemon. Asimismo, el TAD Jugador es Nat que se refiere a un ID entero \'unico. El resto de los detalles relacionados (como sus posiciones, conexi\'on del jugador, etc.) los maneja el TAD Sistema.
 
-- Para el TAD Mapa el enunciado nos pide saber las posiciones v\'alidas y como est\'an conectadas entre s\'i, y para esto \'ultimo supusimos que  adem\'as de saber que si dos puntos est\'an conectados, nos interesa saber si dos puntos est\'an conectados directamente, o sea que haya un camino donde no haya una posici\'on en el medio.
-As\'i diferenciamos estos casos: (Los puntos son posiciones y las l\'ineas conexiones)
-	
-En estos casos en la l\'ogica del juego de la posici\'on (1,1) el jugador se va poder mover correctamente a la posici\'on (2,1), aunque las conexiones entre s\'i sean distintas.
+\item Para el TAD Mapa el enunciado nos pide saber las posiciones v\'alidas y como est\'an conectadas entre s\'i, y para esto \'ultimo supusimos que, adem\'as de saber que si dos puntos est\'an conectados, nos interesa saber si dos puntos est\'an conectados de manera directa, es decir hay un camino entre ambos sin otras posiciones en el medio.
 
-- El TAD Sistema maneja donde se encuentra cada pokemon, y el estado de cada jugador(posici\'on, estado de conexi\'on, sanciones, pokemons capturados)
+Por ejemplo, los siguientes casos se consideran distintos mapas (los puntos son posiciones y las l\'ineas son conexiones directas):
 
-- Cuando un jugador se registra est\'a desconectado
+\bigskip
+\centerline{\includegraphics[scale=0.5]{nodos-mapa.png}}
 
-- Suponemos que un jugador puede estar en la misma posici\'on que otros jugadores o pokemons
+Cabe destacar que esto no afecta la l\'ogica del juego, ya que los requisitos para movimientos v\'alidos siguen siendo 1) una conexi\'on (directa o no) y 2) distancia menor a 10, que se cumplen en ambos mapas. Por lo tanto, el movimiento de (1,1) a (2,1) y su inverso siempre son v\'alidos.
 
-- Por la decisi\'on de que el TAD Pokemon sea un string del tipo al no poder diferenciar pokemons del mismo tipo, los pokemonsCapturados los representamos con un Multiconjunto de pokemons.
+\item Cuando un jugador se registra, el mismo est\'a desconectado y no tiene una posici\'on inicial.
 
-- MovLejosDePos es la operacion que tiene la logica de cuantos movimientos ajenos al jugador hubo fuera del rango de captura. Supusimos que si 2 jugadores estan en el rango de captura de un pokemon determinado y uno de ellos sale del rango, este movimiento cuenta para el jugador que se qued\'o en el rango.
+\item Suponemos que un jugador puede estar en la misma posici\'on que otros jugadores o un pokemon.
 
-- capturaPokemon? es una operaci\'on que nos dice si el jugador atrapa un pokemon en la \'ultima acci\'on del sistema.
+\item Por la decisi\'on de que el TAD Pokemon sea un String del tipo al no poder diferenciar pokemons del mismo tipo, los pokemonsCapturados los representamos con un Multiconjunto de pokemons.
 
-- pokemonACapturar devuelve, si el jugador captura un pokemon, que pokemon captura. Al estar la restricci\'on de que los pokemons tienen que estar m\'inimamente a 5 de distancia y el rango de captura es de 2, el jugador solo puede atrapar un pokemon.
+\item movsLejosDePos es la operacion que tiene la logica de cuantos movimientos hubo fuera del rango de captura, que debe llegar a 10 para que suceda la captura del pokemon que se encuentra ah\'i. Supusimos que si 2 o m\'as jugadores estan en el rango de captura de un pokemon determinado y uno de ellos sale del rango, este movimiento cuenta para los jugadores que permanecen en el rango.
+
+\item capturaPokemon? es una operaci\'on que nos dice si el jugador atrapa un pokemon en la \'ultima acci\'on del sistema.
+
+\item pokemonACapturar devuelve, si el jugador captura un pokemon, que pokemon captura. Al estar la restricci\'on de que los pokemons tienen que estar m\'inimamente a 5 de distancia y el rango de captura es de 2, el jugador solo puede atrapar un pokemon.
+
+\end{itemize}
