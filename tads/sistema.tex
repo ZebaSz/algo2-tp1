@@ -3,7 +3,7 @@
 	
 	\tadExporta{}
 	
-	\tadIgualdadObservacional{s}{s'}{sistema}{}
+	\tadIgualdadObservacional{s}{s'}{sistema}{mapa(s) \igobs mapa(s') $\land$ jugadores(s) \igobs jugadores(s') $\land$  ($\forall$ j : jugadores(s)) (sancionesJugador(j,s) \igobs sancionesJugador(j,s') $\land$ sancionesJugador(j,s) $<$ 5 $\impluego$ (conectado?(j,s) \igobs conectado?(j,s') $\land$ posicionJugador(j,s) \igobs posicionJugador(j,s') $\land$ pokemonsCapturados(j,s) \igobs pokemonsCapturados(j,s') $\land$ conectado?(j,s) $\impluego$ ($\forall$ p : posiciones(mapa(s))) (movsLejosDePos(j,p,s) \igobs movsLejosDePos(j,p,s')))) $\land$ ($\forall$ p : posiciones(mapa(s))) (hayPokemon?(p,s) \igobs hayPokemon?(p,s') $\land$ hayPokemon?(p,s) $\impluego$ pokemonEnPos(p,s) \igobs pokemonEnPos(p,s'))}
 	
 	\tadGeneradores
 		\tadAlinearFunciones{desconectarJugador~}{sistema/s, jugador/j, posicion/p}
@@ -134,9 +134,9 @@
 			FI}
 		FI}
 
-		\tadAxioma{movsLejosDePos(j, p, registrarJugador(s,j'))}{\IF j = j' THEN 0 ELSE movsLejosDePos(j, p, s) FI}
+		\tadAxioma{movsLejosDePos(j, p, registrarJugador(s,j'))}{movsLejosDePos(j, p, s)}
 		\tadAxioma{movsLejosDePos(j, p, conectarJugador(s,j',p'))}{\IF j = j' THEN 0 ELSE movsLejosDePos(j, p, s) FI}
-		\tadAxioma{movsLejosDePos(j, p, desconectarJugador(s,j'))}{\IF j = j' THEN 0 ELSE movsLejosDePos(j, p, s) FI}
+		\tadAxioma{movsLejosDePos(j, p, desconectarJugador(s,j'))}{movsLejosDePos(j, p, s)}
 		\tadAxioma{movsLejosDePos(j, p, agregarPokemon(s,pk,p'))}{\IF p = p' THEN 0 ELSE movsLejosDePos(j, p, s) FI}
 
 		\tadAxioma{movsLejosDePos(j, p, moverJugador(s,j',p'))}
@@ -171,7 +171,7 @@
 		\tadAxioma{sancionesJugador(j, conectarJugador(s,j',p))}{sancionesJugador(j,s)}
 		\tadAxioma{sancionesJugador(j, desconectarJugador(s,j'))}{sancionesJugador(j,s)}
 		\tadAxioma{sancionesJugador(j, moverJugador(s,j',p))}
-		{\IF j = j' $\land$ (10 $\leq$ distancia(p, posicionJugador(j,s)) $\lor$ ($\neg$conexion?(p, posicionJugador(j,s), mapa(s)))) THEN 
+		{\IF j = j' $\yluego$ (10 $\leq$ distancia(p, posicionJugador(j,s)) $\lor$ ($\neg$conexion?(p, posicionJugador(j,s), mapa(s)))) THEN 
 			1 +	sancionesJugador(j,s)
 		ELSE sancionesJugador(j,s) FI}
 		\tadAxioma{sancionesJugador(j, agregarPokemon(s,pk,p))}{sancionesJugador(j,s)}
@@ -212,7 +212,7 @@
 			false
 		ELSE
 			{\IF $\neg$(p = dameUno(ps)) $\land$ distancia(p, dameUno(ps)) $<$ 5 $\land$ hayPokemon?(dameUno(ps), s) THEN
-				false
+				true
 			ELSE
 				pokemonsCerca?(p, sinUno(ps), s)
 			FI}
