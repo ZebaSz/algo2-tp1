@@ -1,7 +1,9 @@
 \begin{tad}{\tadNombre{Sistema}}
 	\tadGeneros{sistema}
 	
-	\tadExporta{}
+	\tadExporta{sistema, generadores, observadores, eliminado?, rareza, jugadoresConectados}
+
+	\tadUsa{\tadNombre{Nat},\tadNombre{Pokemon}, \tadNombre{Jugador}, \tadNombre{Mapa}, \tadNombre{Posicion}, \tadNombre{Bool}, \tadNombre{Conjunto($\alpha$)}, \tadNombre{Multiconjunto($\alpha$)}}
 	
 	\tadIgualdadObservacional{s}{s'}{sistema}
 	{mapa(s) \igobs mapa(s') $\yluego$ \\
@@ -10,10 +12,10 @@
 	(sancionesJugador(j,s) \igobs sancionesJugador(j,s') $\yluego$ \\
 	 sancionesJugador(j,s) $<$ 5 $\impluego$ \\
 	(conectado?(j,s) \igobs conectado?(j,s') $\yluego$ \\
-	conectado(j,s) $\impluego$  \\
+	conectado?(j,s) $\impluego$  \\
 	(posicionJugador(j,s) \igobs posicionJugador(j,s') $\yluego$\\
 	($\forall$ p: posiciones(mapa(s))) \\
-	(movLejosDePos(j,p,s) \igobs movLejosDePos(j,p,s'))))))}
+	(movsLejosDePos(j,p,s) \igobs movsLejosDePos(j,p,s'))))))}
 		
 	\tadGeneradores
 		\tadAlinearFunciones{desconectarJugador~}{sistema/s, jugador/j, posicion/p}
@@ -28,7 +30,7 @@
 		
 		\tadOperacion{moverJugador}{sistema/s, jugador/j, posicion/p}{sistema}{(j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s)  $\yluego$conectado?(j,s)) $\land$ p $\in$ posiciones(mapa(s))}
 
-		\tadOperacion{agregarPokemon}{sistema/s, pokemon, posicion/p}{sistema}{p $\in$ posiciones(mapa(s)) $\yluego$ ($\neg$(hayPokemon?(p, s)) $\land$ pokemonsCerca?(p, posiciones(mapa(s)), s))}
+		\tadOperacion{agregarPokemon}{sistema/s, pokemon, posicion/p}{sistema}{p $\in$ posiciones(mapa(s)) $\yluego$ ($\neg$(hayPokemon?(p, s)) $\land$ \\ pokemonsCerca?(p, posiciones(mapa(s)), s))}
 		
 	\tadObservadores
 		\tadAlinearFunciones{pokemonsCapturados~}{jugador/j, posicion/p, sistema/s}
@@ -54,19 +56,15 @@
 		\tadOperacion{pokemonsEnArea}{conj(posicion)/ps, sistema/s}{multiconj(pokemon)}{ps $\subseteq$ posiciones(mapa(s))}
 		\tadOperacion{pokemonsCapturadosPorGrupo}{conj(jugador)/js, sistema/s}{multiconj(pokemon)}{js $\subseteq$ jugadores(s)}
 		
-		\tadOperacion{distancia}{posicion, posicion}{nat}{}
-		
 		\tadOperacion{\argumento $\div$ \argumento}{nat/n, nat/m}{nat}{0 $<$ m}
-		\tadOperacion{raizCuadrada}{nat}{nat}{}
-		\tadOperacion{encontrarRaiz}{nat/n, nat/m}{nat}{m $\leq$ n}
 		
 		\tadOperacion{capturaPokemon?}{jugador/j, posiciones/ps, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ ps $\subseteq$ posiciones(mapa(s))}
 		\tadOperacion{pokemonACapturar}{jugador/j, posiciones/ps, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ ps $\subseteq$ posiciones(mapa(s))}
 		\tadOperacion{jugadoresConectados}{conj(jugador)/js, sistema/s}{conj(jugador)}{js $\subseteq$ jugadores(s)} 
 
-		\tadOperacion{pokemonsCerca?}{posicion/p, posiciones/ps, sistema/s}{bool}{p $\in$ posiciones(mapa(s)) $\land$ ps $\subseteq$ posiciones(mapa(s))} $ \\ $
+		\tadOperacion{pokemonsCerca?}{posicion/p, posiciones/ps, sistema/s}{bool}{p $\in$ posiciones(mapa(s)) $\land$ ps $\subseteq$ posiciones(mapa(s))}
 
-	\tadAxiomas [\paratodo{mapa,}{\ m} \paratodo{sistema,}{\ s} \paratodo{jugador,}{\ j, j'} \paratodo{posicion,}{\ p, p'} \paratodo{pokemon,}{\ pk} \paratodo{nat,}{\ n, m} $ \\ $\paratodo{conj(jugador),}{\ js} \paratodo{conj(posicion)}{\ ps}] $ \\ $
+	\tadAxiomas [\paratodo{mapa,}{\ m} \paratodo{sistema,}{\ s} \paratodo{jugador,}{\ j, j'} \paratodo{posicion,}{\ p, p'} \paratodo{pokemon,}{\ pk} \paratodo{nat,}{\ n, m} $ \\ $\paratodo{conj(jugador),}{\ js} \paratodo{conj(posicion)}{\ ps}]
 		\tadAxioma{mapa(crearSistema(m))}{m}
 		\tadAxioma{mapa(registrarJugador(s,j))}{mapa(s)}
 		\tadAxioma{mapa(conectarJugador(s,j,p))}{mapa(s)}
@@ -174,10 +172,6 @@
 		FI}
 
 
-
-
-
-
 		\tadAxioma{sancionesJugador(j, registrarJugador(s,j'))}{\IF j = j' THEN 0 ELSE sancionesJugador(j,s) FI}
 		\tadAxioma{sancionesJugador(j, conectarJugador(s,j',p))}{sancionesJugador(j,s)}
 		\tadAxioma{sancionesJugador(j, desconectarJugador(s,j'))}{sancionesJugador(j,s)}
@@ -256,24 +250,7 @@
 				pokemonsCapturados(dameUno(js), s) $\cup$ pokemonsCapturadosPorGrupo(sinUno(js), s)
 			FI}
 		FI}
-		
-		
-		
-		\tadAxioma{distancia(p,p')}
-		{\IF $\pi_1$(p) $<$ $\pi_1$(p')  THEN
-			distancia( $\langle\pi_1$(p'), $\pi_2$(p)$\rangle$ , $\langle\pi_1$(p), $\pi_2$(p')$\rangle$)
-		ELSE
-			{\IF $\pi_2$(p) $<$ $\pi_2$(p') THEN
-				distancia( $\langle\pi_1$(p), $\pi_2$(p')$\rangle$, $\langle\pi_1$(p'), $\pi_2$(p)$\rangle$)
-			ELSE
-				raiz((($\pi_1$(p) - $\pi_1$(p')) $\times$ ($\pi_1$(p) - $\pi_1$(p'))) + (($\pi_2$(p) - 		$\pi_2$(p')) $\times$ ($\pi_2$(p) - $\pi_2$(p'))))
-			FI}
-		FI}
-		
+				
 		\tadAxioma{n $\div$ m}{\IF n $<$ m THEN 0 ELSE 1 + ( (n-m) $\div$ m) FI}
-		
-		\tadAxioma{raiz(n)}{encontrarRaiz(n,n)}
-		\tadAxioma{encontrarRaiz(n,m)}{\IF n $<$ m $\times$ m THEN encontrarRaiz(n, pred(m)) ELSE m FI}
-		
 
 \end{tad}
