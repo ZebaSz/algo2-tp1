@@ -109,24 +109,25 @@
 		\tadAxioma{pokemonsCapturados(j, desconectarJugador(s,j'))}{pokemonsCapturados(j,s)}
 		\tadAxioma{pokemonsCapturados(j, agregarPokemon(s,pk,p))}{pokemonsCapturados(j,s)}
 		\tadAxioma{pokemonsCapturados(j, moverJugador(s,j',p))}
-		{\IF conectado?(j) $\yluego$ capturaPokemon?(j, posiciones(mapa(s)), moverJugador(s,j',p)) THEN
-			Ag(pokemonACapturar(j, posiciones(mapa(s)), moverJugador(s,j',p)), pokemonsCapturados(j, s))
+		
+		{\IF conectado?(j) $\yluego$ capturaPokemon?(j, posiciones(mapa(s)), j',p, s)) THEN
+			Ag(pokemonACapturar(j, posiciones(mapa(s)), j', p, s)), pokemonsCapturados(j, s))
 		ELSE
 			pokemonsCapturados(j, s)
 		FI}
 
-		\tadAxioma{capturaPokemon?(j, ps, s)}
+		\tadAxioma{capturaPokemon?(j, ps, j', p, s)}
 		{\IF vacio?(ps) THEN
 			false
 		ELSE
 			{\IF hayPokemon?(dameUno(ps), s) $\land$ distancia(posicionJugador(j, s), dameUno(ps)) $\leq$ 2 THEN
-				$\neg\emptyset$?(jugadoresDisponiblesACapturar(jugadoresConectados(jugadores(s), s), dameUno(ps), s)) $\yluego$ $ \\ $ j = dameUno(jugadoresDisponiblesACapturar(jugadoresConectados(jugadores(s), s), dameUno(ps), s))
+				$\neg\emptyset$?(jugadoresDisponiblesACapturar(jugadoresConectados(jugadores(s), s), dameUno(ps), j', p, s)) $\yluego$ $ \\ $ j = dameUno(jugadoresDisponiblesACapturar(jugadoresConectados(jugadores(s), s), dameUno(ps), j', p, s))
 			ELSE
-				capturaPokemon?(j, sinUno(ps), s)
+				capturaPokemon?(j, sinUno(ps), j', p, s)
 			FI}
 		FI}
 		
-		\tadAxioma{pokemonACapturar(j, ps, s)}
+		\tadAxioma{pokemonACapturar(j, ps, j', p, s)}
 		{\IF hayPokemon?(dameUno(ps), s) $\land$ distancia(posicionJugador(j, s), dameUno(ps)) $\leq$ 2 THEN
 			pokemonEnPos(dameUno(ps), s)
 		ELSE
