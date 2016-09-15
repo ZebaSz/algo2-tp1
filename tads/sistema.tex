@@ -129,17 +129,17 @@
 		{\IF hayPokemon?(dameUno(ps), s) $\land$ distancia(posicionJugador(j, s), dameUno(ps)) $\leq$ 2 THEN
 			pokemonEnPos(dameUno(ps), s)
 		ELSE
-			capturaPokemon?(j, sinUno(ps), s)
+			pokemonACapturar(j, sinUno(ps), j', p, s)
 		FI}
 
-		\tadAxioma{jugadoresDisponiblesACapturar(js, p, s)}
+		\tadAxioma{jugadoresDisponiblesACapturar(js, p, j, p', s)}
 		{\IF vacio?(js) THEN
 			$\emptyset$
 		ELSE
 			{\IF movsLejosDePos(dameUno(js), s) = 10 THEN
-				Ag(dameUno(js), jugadoresDisponiblesACapturar(sinUno(js, p, s)))
+				Ag(dameUno(js), jugadoresDisponiblesACapturar(sinUno(js), p, j, p', s))
 			ELSE
-				jugadoresDisponiblesACapturar(sinUno(js, p, s))
+				jugadoresDisponiblesACapturar(sinUno(js), p, j, p', s)
 			FI}
 		FI}
 
