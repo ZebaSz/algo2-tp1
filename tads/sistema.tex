@@ -71,7 +71,7 @@
 
 		\tadOperacion{pokemonsCerca?}{posicion/p, posiciones/ps, sistema/s}{bool}{p $\in$ posiciones(mapa(s)) $\land$ ps $\subseteq$ posiciones(mapa(s))}
 
-	\tadAxiomas [\paratodo{mapa,}{\ m} \paratodo{sistema,}{\ s} \paratodo{jugador,}{\ j, j'} \paratodo{posicion,}{\ p, p'} \paratodo{pokemon,}{\ pk} \paratodo{nat,}{\ n, m} $ \\ $\paratodo{conj(jugador),}{\ js} \paratodo{conj(posicion)}{\ ps}]
+	\tadAxiomas [\paratodo{mapa,}{\ m} \paratodo{sistema,}{\ s} \paratodo{jugador,}{\ j, j'} \paratodo{posicion,}{\ p, p'} \paratodo{pokemon,}{\ pk} \paratodo{nat,}{\ n, m} $ \\ $\paratodo{conj(jugador),}{\ js} \paratodo{conj(posicion),}{\ ps} \paratodo{multiconj(pokemon)}{\ pks}]
 		\tadAxioma{mapa(crearSistema(m, n))}{m}
 		\tadAxioma{mapa(registrarJugador(s,j))}{mapa(s)}
 		\tadAxioma{mapa(conectarJugador(s,j,p))}{mapa(s)}
@@ -235,7 +235,7 @@
 		\tadAxioma{pokemonEnPos(p, agregarPokemon(s,pk,p'))}{\IF p = p' THEN pk ELSE pokemonEnPos(p,s) FI}
 		\tadAxioma{pokemonEnPos(p, cambiarCotizacion(s,n))}{pokemonEnPos(p, s)}
 		\tadAxioma{pokemonEnPos(p, pagarBoleta(s,j,n))}{pokemonEnPos(p, s)}
-		
+
 		\tadAxioma{pokemonsCerca?(p, ps, s)}
 		{\IF vacio?(ps) THEN
 			false
@@ -287,4 +287,15 @@
 		\tadAxioma{pokeCotizacion(moverJugador(s,j,p))}{pokeCotizacion(s)}
 		\tadAxioma{pokeCotizacion(agregarPokemon(s,pk,p))}{pokeCotizacion(s)
 		\tadAxioma{pokeCotizacion(cambiarCotizacion(s, n))}{n}
+
+
+
+		\tadAxioma{valorPokemones(pks, s)}
+		{\IF vacio?(pks) THEN
+			0
+		ELSE
+			(rareza(dameUno(pks), s) $\times$ pokeCotizacion(s)) + valorPokemones(sinUno(pks))
+		FI}
+
+
 \end{tad}
