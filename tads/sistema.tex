@@ -109,7 +109,7 @@
 		\tadAxioma{pokemonsCapturados(j, moverJugador(s,j',p))}
 		
 		{\IF conectado?(j) $\yluego$ capturaPokemon?(j, posiciones(mapa(s)), j',p, s)) THEN
-			Ag(pokemonACapturar(j, posiciones(mapa(s)), j', p, s)), pokemonsCapturados(j, s))
+			Ag(pokemonACapturar(j, posiciones(mapa(s)), s)), pokemonsCapturados(j, s))
 		ELSE
 			pokemonsCapturados(j, s)
 		FI}
@@ -125,18 +125,18 @@
 			FI}
 		FI}
 		
-		\tadAxioma{pokemonACapturar(j, ps, j', p, s)}
+		\tadAxioma{pokemonACapturar(j, ps, s)}
 		{\IF hayPokemon?(dameUno(ps), s) $\land$ distancia(posicionJugador(j, s), dameUno(ps)) $\leq$ 2 THEN
 			pokemonEnPos(dameUno(ps), s)
 		ELSE
-			pokemonACapturar(j, sinUno(ps), j', p, s)
+			pokemonACapturar(j, sinUno(ps), s)
 		FI}
 
 		\tadAxioma{jugadoresDisponiblesACapturar(js, p, j, p', s)}
 		{\IF vacio?(js) THEN
 			$\emptyset$
 		ELSE
-			{\IF movsLejosDePos(dameUno(js), s) = 10 THEN
+			{\IF movsLejosDePos(dameUno(js), s) = 9 $\land$ 2 $\<$ distancia(p, p') $\land$ j $\neq$ dameUno(js) THEN
 				Ag(dameUno(js), jugadoresDisponiblesACapturar(sinUno(js), p, j, p', s))
 			ELSE
 				jugadoresDisponiblesACapturar(sinUno(js), p, j, p', s)
@@ -170,7 +170,6 @@
 		ELSE
 			0
 		FI}
-
 
 		\tadAxioma{sancionesJugador(j, registrarJugador(s,j'))}{\IF j = j' THEN 0 ELSE sancionesJugador(j,s) FI}
 		\tadAxioma{sancionesJugador(j, conectarJugador(s,j',p))}{sancionesJugador(j,s)}
