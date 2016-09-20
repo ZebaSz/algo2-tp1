@@ -32,9 +32,9 @@
 
 		\tadOperacion{agregarPokemon}{sistema/s, pokemon, posicion/p}{sistema}{p $\in$ posiciones(mapa(s)) $\yluego$ ($\neg$(hayPokemon?(p, s)) $\land$ \\ pokemonsCerca?(p, posiciones(mapa(s)), s))}
 
-		\tadOperacion{cambiarCotizacion}{sistema/s, nat/n}{0 $\<$ n}
+		\tadOperacion{cambiarCotizacion}{sistema/s, nat/n}{}{0 $\<$ n}
 		%% TODO:Agregar que el precio de los pokemons del jugador pase la boleta y que el jugador pertenezca al juego
-		\tadOperacion{pagarBoleta}{sistema/s, jugador/j, nat/n}{}
+		\tadOperacion{pagarBoleta}{sistema/s, jugador/j, nat/n}{}{}
 		
 	\tadObservadores
 		\tadAlinearFunciones{pokemonsCapturados~}{jugador/j, posicion/p, sistema/s}
@@ -51,7 +51,7 @@
 		\tadOperacion{movsLejosDePos}{jugador/j, posicion/p, sistema/s}{nat}{j $\in$ jugadoresConectados(jugadores(s)), p $\in$ posiciones(mapa(s))}
 
 		%%agrego la cotizacion como un observador
-		\tadOperacion{pokeCotizacion}{sistema/s}{}
+		\tadOperacion{pokeCotizacion}{sistema/s}{}{}
 
 	\tadOtrasOperaciones
 		\tadAlinearFunciones{pokemonsCapturadosPorGrupo~}{jugador/j, posiciones/ps, sistema/s}
@@ -285,7 +285,7 @@
 		\tadAxioma{pokeCotizacion(conectarJugador(s,j,p))}{pokeCotizacion(s)}
 		\tadAxioma{pokeCotizacion(desconectarJugador(s,j))}{pokeCotizacion(s)}
 		\tadAxioma{pokeCotizacion(moverJugador(s,j,p))}{pokeCotizacion(s)}
-		\tadAxioma{pokeCotizacion(agregarPokemon(s,pk,p))}{pokeCotizacion(s)
+		\tadAxioma{pokeCotizacion(agregarPokemon(s,pk,p))}{pokeCotizacion(s)}
 		\tadAxioma{pokeCotizacion(cambiarCotizacion(s, n))}{n}
 
 
