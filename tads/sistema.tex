@@ -122,7 +122,7 @@
 		\tadAxioma{pokemonsCapturados(j, desconectarJugador(s,j'))}{pokemonsCapturados(j,s)}
 		\tadAxioma{pokemonsCapturados(j, agregarPokemon(s,pk,p))}{pokemonsCapturados(j,s)}
 		\tadAxioma{pokemonsCapturados(j, cambiarCotizacion(s,n))}{pokemonsCapturados(j, s)}
-		\tadAxioma{pokemonsCapturados(j, pagarBoleta(s,j',n))}{TODO}
+		\tadAxioma{pokemonsCapturados(j, pagarBoleta(s,j',n))}{pokemonsCapturados(j, s) - dameUno(menores(filtrar(partes(pokemonsCapturados(j, s)), n, s), s))}
 		\tadAxioma{pokemonsCapturados(j, moverJugador(s,j',p))}
 		{\IF conectado?(j) $\yluego$ capturaPokemon?(j, posiciones(mapa(s)), j',p, s)) THEN
 			Ag(pokemonACapturar(j, posiciones(mapa(s)), s)), pokemonsCapturados(j, s))
@@ -152,7 +152,7 @@
 		{\IF vacio?(js) THEN
 			$\emptyset$
 		ELSE
-			{\IF movsLejosDePos(dameUno(js), s) = 9 $\land$ 2 $\<$ distancia(p, p') $\land$ j $\neq$ dameUno(js) THEN
+			{\IF movsLejosDePos(dameUno(js), s) = 9 $\land$ 2 $<$ distancia(p, p') $\land$ j $\neq$ dameUno(js) THEN
 				Ag(dameUno(js), jugadoresDisponiblesACapturar(sinUno(js), p, j, p', s))
 			ELSE
 				jugadoresDisponiblesACapturar(sinUno(js), p, j, p', s)
@@ -297,5 +297,43 @@
 			(rareza(dameUno(pks), s) $\times$ pokeCotizacion(s)) + valorPokemones(sinUno(pks))
 		FI}
 
+
+
+
+		\tadAxioma{filtrar(cpks, n , s)}
+		{\IF vacio?(cpks) THEN
+			$\emptyset$
+		ELSE
+			{\IF n $\leq$ valorPokemones(dameUno(cpks), s) THEN
+				Ag(dameUno(cpks), filtrar(sinUno(cpks), n, s))
+			ELSE
+				filtrar(sinUno(cpks), n, s)
+			FI}
+		FI}
+
+		\tadAxioma{menores(cpks, s)}
+		{\IF vacio?(sinUno(cpks)) $\oluego$ valorPokemones(dameUno(cpks), s) $<$ valorPokemones(sinUno(menores(sinUno(cpks), s)), s)THEN
+			Ag(dameUno(cpks), $\emptyset$)
+		ELSE			
+			{\IF valorPokemones(dameUno(cpks), s) $=$ valorPokemones(sinUno(menores(sinUno(cpks), s)), s) THEN
+				Ag(dameUno(cpks), menores(sinUno(cpks), s)))
+			ELSE
+				menores(sinUno(cpks), s)
+			FI}
+		FI}
+
+		\tadAxioma{partes(pks)}
+		{\IF vacio?(pks) THEN
+			$\emptyset$
+		ELSE	
+			agregarATodos(dameUno(pks), partes(sinUno(pks))) $\cup$ partes(sinUno(pks)) 
+		FI}
+
+		\tadAxioma{agregarATodos(pk, cpks)}
+		{\IF vacio?(cpks) THEN
+			$\emptyset$
+		ELSE
+			Ag(Ag(pk, dameUno(cpks)), agregarATodos(pk, sinUno(cpks))
+		FI}
 
 \end{tad}
