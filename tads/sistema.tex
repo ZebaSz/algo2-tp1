@@ -4,9 +4,10 @@
 	\tadExporta{sistema, generadores, observadores, eliminado?, rareza, jugadoresConectados}
 
 	\tadUsa{\tadNombre{Nat},\tadNombre{Pokemon}, \tadNombre{Jugador}, \tadNombre{Mapa}, \tadNombre{Posicion}, \tadNombre{Bool}, \tadNombre{Conjunto($\alpha$)}, \tadNombre{Multiconjunto($\alpha$)}}
-	
+
 	\tadIgualdadObservacional{s}{s'}{sistema}
-	{mapa(s) \igobs mapa(s') $\yluego$ \\
+	{pokeCotizacion(s) \igobs pokeCotizacion(s') $\land$ \\
+	mapa(s) \igobs mapa(s') $\yluego$ \\
 	($\forall$ p : posiciones(mapa(s)))(hayPokemon?(p,s)	\igobs hayPokemon?(p,s') $\land$ (hayPokemon?(p,s) $\impluego$ pokemonEnPos(p,s) \igobs pokemonEnPos(p,s'))) $\yluego$ \\
 	(jugadores(s) \igobs jugadores(s') $\yluego$ ($\forall$ j : jugadores(s)) \\
 	(sancionesJugador(j,s) \igobs sancionesJugador(j,s') $\yluego$ \\
@@ -75,14 +76,16 @@
 
 
 		\tadOperacion{valorPokemones}{conj(pokemon)/pks, sistema/s}{nat}{0 $< \#$todosLosPokemons(s)}
+		\tadOperacion{pokemonesADebitar}{jugador/j, nat/n, sistema/s}{multiconj(pokemon)}{j $\in$ jugadores(s)}
 		\tadOperacion{filtrar}{multiconj(conj(pokemon))/cpks, nat/n, sistema/s}{multiconj(conj(pokemon))}{0 $< \#$todosLosPokemons(s)}
 		\tadOperacion{menores}{multiconj(conj(pokemon))/cpks, sistema/s}{multiconj(conj(pokemon))}{0 $< \#$todosLosPokemons(s)}
 		% TODO mandar esto y las otras operaciones a extensiones de TAD
 		\tadOperacion{partes}{multiconj($\alpha$)}{conj(multiconj($\alpha$))}{}
 		\tadOperacion{agregarATodos}{$\alpha$, conj(multiconj($\alpha$))}{conj(multiconj($\alpha$))}{}
+		\tadOperacion{\argumento $-$ \argumento}{multiconj($\alpha$), multiconj($\alpha$)}{multiconj($\alpha$)}{}
 
 
-	\tadAxiomas [\paratodo{mapa,}{\ m} \paratodo{sistema,}{\ s} \paratodo{jugador,}{\ j, j'} \paratodo{posicion,}{\ p, p'} \paratodo{pokemon,}{\ pk} \paratodo{nat,}{\ n, m} $ \\ $\paratodo{conj(jugador),}{\ js} \paratodo{conj(posicion),}{\ ps} \paratodo{multiconj(pokemon)}{\ pks}]
+	\tadAxiomas [\paratodo{mapa}{\ m}, \paratodo{sistema}{\ s}, \paratodo{jugador}{\ j, j'}, \paratodo{posicion}{\ p, p'}, \paratodo{pokemon}{\ pk}, \paratodo{nat}{\ n, m}, \\ \paratodo{conj(jugador)}{\ js}, \paratodo{conj(posicion)}{\ ps}, \paratodo{multiconj(pokemon)}{\ pks}, \paratodo{conj(multiconj(pokemon))}{\ cpks}]
 		\tadAxioma{mapa(crearSistema(m, n))}{m}
 		\tadAxioma{mapa(registrarJugador(s,j))}{mapa(s)}
 		\tadAxioma{mapa(conectarJugador(s,j,p))}{mapa(s)}
@@ -133,7 +136,7 @@
 		\tadAxioma{pokemonsCapturados(j, desconectarJugador(s,j'))}{pokemonsCapturados(j,s)}
 		\tadAxioma{pokemonsCapturados(j, agregarPokemon(s,pk,p))}{pokemonsCapturados(j,s)}
 		\tadAxioma{pokemonsCapturados(j, cambiarCotizacion(s,n))}{pokemonsCapturados(j, s)}
-		\tadAxioma{pokemonsCapturados(j, pagarBoleta(s,j',n))}{pokemonsCapturados(j, s) - \IF j = j' THEN dameUno(menores(filtrar(partes(pokemonsCapturados(j, s)), n, s), s)) ELSE 0 FI}
+		\tadAxioma{pokemonsCapturados(j, pagarBoleta(s,j',n))}{pokemonsCapturados(j, s) - \IF j = j' THEN pokemonesADebitar(j,n,s) ELSE $\emptyset$ FI}
 		\tadAxioma{pokemonsCapturados(j, moverJugador(s,j',p))}
 		{\IF conectado?(j) $\yluego$ capturaPokemon?(j, posiciones(mapa(s)), j',p, s)) THEN
 			Ag(pokemonACapturar(j, posiciones(mapa(s)), s)), pokemonsCapturados(j, s))
@@ -160,14 +163,14 @@
 		FI}
 
 		\tadAxioma{jugadoresDisponiblesACapturar(js, p, j, p', s)}
-		{\IF vacio?(js) THEN
+		{\IF vacio?(js) $\lor$ distancia(p, p') $\leq$ 2 THEN
 			$\emptyset$
 		ELSE
-			{\IF movsLejosDePos(dameUno(js), s) = 9 $\land$ 2 $<$ distancia(p, p') $\land$ j $\neq$ dameUno(js) THEN
-				Ag(dameUno(js), jugadoresDisponiblesACapturar(sinUno(js), p, j, p', s))
+			{\IF movsLejosDePos(dameUno(js), s) = 9 $\land$ j $\neq$ dameUno(js) THEN
+				Ag(dameUno(js), $\emptyset$)
 			ELSE
-				jugadoresDisponiblesACapturar(sinUno(js), p, j, p', s)
-			FI}
+				$\emptyset$
+			FI} $\cup$ jugadoresDisponiblesACapturar(sinUno(js), p, j, p', s)
 		FI}
 
 		\tadAxioma{movsLejosDePos(j, p, registrarJugador(s,j'))}{movsLejosDePos(j, p, s)}
@@ -216,27 +219,14 @@
 		\tadAxioma{hayPokemon?(p, registrarJugador(s,j))}{hayPokemon?(p,s)}
 		\tadAxioma{hayPokemon?(p, conectarJugador(s,j,p'))}{hayPokemon?(p,s)}
 		\tadAxioma{hayPokemon?(p, desconectarJugador(s,j))}{hayPokemon?(p,s)}
-		\tadAxioma{hayPokemon?(p, moverJugador(s,j,p'))}
-		{\IF hayPokemon?(p,s) THEN
-			$\neg$alguienCapturaPokemon?(jugadoresConectados(jugadores(s), s), p, j, p', s)
-		ELSE
-			false
-		FI}
+		\tadAxioma{hayPokemon?(p, moverJugador(s,j,p'))}{hayPokemon?(p,s) $\yluego$ \\ $\neg$alguienCapturaPokemon?(jugadoresConectados(jugadores(s), s), p, j, p', s)}
 		\tadAxioma{hayPokemon?(p, agregarPokemon(s,pk,p'))}{\IF p = p' THEN true ELSE hayPokemon?(p,s) FI}
 		\tadAxioma{hayPokemon?(p, cambiarCotizacion(s,n))}{hayPokemon?(p, s)}
 		\tadAxioma{hayPokemon?(p, pagarBoleta(s,j,n))}{hayPokemon?(p, s)}
 
 		
 		\tadAxioma{alguienCapturaPokemon?(js, p, s)}
-		{\IF vacio?(js) THEN
-			false
-		ELSE
-			{\IF capturaPokemon?(dameUno(js), p, s) THEN
-				true
-			ELSE
-				capturaPokemon?(sinUno(js), p, s)
-			FI}
-		FI}
+		{$\neg$vacio?(js) $\yluego$ (capturaPokemon?(dameUno(js), p, s) $\lor$ capturaPokemon?(sinUno(js), p, s))}
 
 
 		\tadAxioma{pokemonEnPos(p, registrarJugador(s,j))}{pokemonEnPos(p,s)}
@@ -248,15 +238,13 @@
 		\tadAxioma{pokemonEnPos(p, pagarBoleta(s,j,n))}{pokemonEnPos(p, s)}
 
 		\tadAxioma{pokemonsCerca?(p, ps, s)}
-		{\IF vacio?(ps) THEN
-			false
-		ELSE
+		{$\neg$vacio?(ps) $\yluego$
 			{\IF $\neg$(p = dameUno(ps)) $\land$ distancia(p, dameUno(ps)) $<$ 5 $\land$ hayPokemon?(dameUno(ps), s) THEN
 				true
 			ELSE
 				pokemonsCerca?(p, sinUno(ps), s)
 			FI}
-		FI}
+		}
 
 		\tadAxioma{eliminado?(j,s)}{sancionesJugador(j,s) = 5}
 
@@ -296,6 +284,7 @@
 		\tadAxioma{pokeCotizacion(moverJugador(s,j,p))}{pokeCotizacion(s)}
 		\tadAxioma{pokeCotizacion(agregarPokemon(s,pk,p))}{pokeCotizacion(s)}
 		\tadAxioma{pokeCotizacion(cambiarCotizacion(s, n))}{n}
+		\tadAxioma{pokeCotizacion(pagarBoleta(s, j, n))}{pokeCotizacion(s)}
 
 
 		\tadAxioma{valorPokemones(pks, s)}
@@ -304,6 +293,8 @@
 		ELSE
 			(rareza(dameUno(pks), s) $\times$ pokeCotizacion(s)) + valorPokemones(sinUno(pks))
 		FI}
+
+		\tadAxioma{pokemonesADebitar(j,n,s)}{dameUno(menores(filtrar(partes(pokemonsCapturados(j, s)), n, s), s))}
 
 
 		\tadAxioma{filtrar(cpks, n, s)}
@@ -328,7 +319,7 @@
 
 		\tadAxioma{partes(pks)}
 		{\IF vacio?(pks) THEN
-			$\emptyset$
+			Ag($\emptyset$,$\emptyset$)
 		ELSE	
 			agregarATodos(dameUno(pks), partes(sinUno(pks))) $\cup$ partes(sinUno(pks)) 
 		FI}
@@ -341,14 +332,11 @@
 		FI}
 
 
-		\tadAxiomas{a - b}
+		\tadAxioma{a $-$ b}
 		{\IF vacio?(b) THEN
 			a
 		ELSE
-			(a - {dameUno(b)}) - sinUno(b)
+			(a $-$ \{dameUno(b)\}) $-$ sinUno(b)
 		FI}
 
 \end{tad}
-
-
-
