@@ -207,7 +207,7 @@
 		\tadAxioma{hayPokemon?(p, desconectarJugador(s,j))}{hayPokemon?(p,s)}
 		\tadAxioma{hayPokemon?(p, moverJugador(s,j,p'))}
 		{\IF hayPokemon?(p,s) THEN
-			$\neg$alguienCapturaPokemon(jugadoresConectados(jugadores(s), s), p, moverJugador(s,j,p'))
+			$\neg$alguienCapturaPokemon(jugadoresConectados(jugadores(s), s), p, s)
 		ELSE
 			false
 		FI}
