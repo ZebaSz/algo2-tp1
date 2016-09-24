@@ -147,7 +147,7 @@
 
 		\tadAxioma{capturando?(j, ps, s)}{\IF vacio?(ps) THEN false ELSE capturandoPK?(j, dameUno(ps), s) $\lor$ capturando(j, sinUno(ps), s) FI}
 
-		\tadAxioma{posCaptura(j, ps, s)}{juntarPosCaptura(j, posiciones(mapa(s)), s)}
+		\tadAxioma{posCaptura(j, s)}{juntarPosCaptura(j, posiciones(mapa(s)), s)}
 
 		\tadAxioma{juntarPosCaptura(j, ps, s)}
 		{\IF capturandoPk?(j, dameUno(ps), s) THEN 
@@ -175,8 +175,8 @@
 		\tadAxioma{capturaPokemon?(j, j', p', s)}{
 			capturando?(j, posiciones(mapa(s)), s) $\yluego$ $\\$
 			movsLejosDePosDespuesDelMov(j, posCaptura(j, s), j', p', s) = 10 $\land$ $\\$
-			$\neg\emptyset$?(jugadoresCapturandoPk(posCaptura(j, posiciones(mapa(s)), s)) - \{j'\}) $\yluego$ $\\$
-			j = dameUno(jugadoresCapturandoPk(posCaptura(j, posiciones(mapa(s)), s)) - \{j'\})
+			$\neg\emptyset$?(jugadoresCapturandoPk(posCaptura(j, s), s) - \{j'\}) $\yluego$ $\\$
+			j = dameUno(jugadoresCapturandoPk(posCaptura(j, s), s) - \{j'\})
 		}
 
 		%FIN NUEVO
