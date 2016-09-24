@@ -147,12 +147,15 @@
 
 		\tadAxioma{capturando?(j, ps, s)}{\IF vacio?(ps) THEN false ELSE capturandoPK?(j, dameUno(ps), s) $\lor$ capturando(j, sinUno(ps), s) FI}
 
-		\tadAxioma{posCaptura(j, ps, s)}
+		\tadAxioma{posCaptura(j, ps, s)}{juntarPosCaptura(j, posiciones(mapa(s)), s)}
+
+		\tadAxioma{juntarPosCaptura(j, ps, s)}
 		{\IF capturandoPk?(j, dameUno(ps), s) THEN 
 			dameUno(ps) 
 		ELSE
-			posCaptura(j, sinUno(ps), s) 
+			juntarPosCaptura(j, sinUno(ps), s) 
 		FI}
+
 
 		\tadAxioma{pokemonACapturar(j, s)}{pokemonEnPos(posCaptura(j, posiciones(mapa(s)), s), s)}
 
@@ -171,8 +174,7 @@
 
 		\tadAxioma{capturaPokemon?(j, j', p', s)}{
 			capturando?(j, posiciones(mapa(s)), s) $\yluego$ $\\$
-			movsLejosDePos(j, p, s) = 9 $\land$ $\\$
-			2 $<$ distancia(posCaptura(j, posiciones(mapa(s)), s), p') $\land$ $\\$
+			movsLejosDePosDespuesDelMov(j, posCaptura(j, s), j', p', s) = 10 $\land$ $\\$
 			$\neg\emptyset$?(jugadoresCapturandoPk(posCaptura(j, posiciones(mapa(s)), s)) - \{j'\}) $\yluego$ $\\$
 			j = dameUno(jugadoresCapturandoPk(posCaptura(j, posiciones(mapa(s)), s)) - \{j'\})
 		}
@@ -184,7 +186,9 @@
 		\tadAxioma{movsLejosDePos(j, p, desconectarJugador(s,j'))}{movsLejosDePos(j, p, s)}
 		\tadAxioma{movsLejosDePos(j, p, agregarPokemon(s,pk,p'))}{\IF p = p' THEN 0 ELSE movsLejosDePos(j, p, s) FI}
 
-		\tadAxioma{movsLejosDePos(j, p, moverJugador(s,j',p'))}
+		\tadAxioma{movsLejosDePos(j, p, moverJugador(s,j',p'))}{movsLejosDePosDespuesDelMov(j, p, j', p', s)}
+
+		\tadAxioma{movsLejosDePosDespuesDelMov(j, p, j', p', s)}
 		{\IF distancia(p, posicionJugador(j, s)) $\leq$ 2 THEN
 			{\IF j = j' THEN
 				{\IF distancia(p, p') $\leq$ 2 THEN
@@ -206,6 +210,8 @@
 		ELSE
 			0
 		FI}
+
+
 		\tadAxioma{movsLejosDePos(j, p, cambiarCotizacion(s,n))}{movsLejosDePos(j, p, s)}
 		\tadAxioma{movsLejosDePos(j, p, pagarBoleta(s,j',n))}{movsLejosDePos(j, p, s)}
 
