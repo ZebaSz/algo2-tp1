@@ -3,7 +3,7 @@
 	
 	\tadExporta{mapa, generadores, observadores, conexion?, distancia}
 
-	\tadUsa{\tadNombre{Nat}, \tadNombre{Posicion}, \tadNombre{Bool}, \tadNombre{Conjunto($\alpha$)}}
+	\tadUsa{\tadNombre{NatExtendido}, \tadNombre{Posicion}, \tadNombre{Bool}, \tadNombre{Conjunto($\alpha$)}}
 	
 	\tadIgualdadObservacional{m}{m'}{mapa}{posiciones(m) \igobs posiciones(m') $\land$ \\ ($\forall$ p : posiciones(m)) (conexionesDirectas(p,m) \igobs conexionesDirectas(p,m'))}
 	
@@ -25,36 +25,34 @@
 		\tadOperacion{hayAlgunaConexion?}{posicion/p, conj(posiciones)/c, mapa/m}{bool}{p $\in$ posiciones(m) $\land$ c $\subseteq$ posiciones(m)}
 
 		\tadOperacion{distancia}{posicion, posicion}{nat}{}
-		\tadOperacion{$\sqrt{\argumento}$}{nat}{nat}{}
-		\tadOperacion{encontrarRaiz}{nat/n, nat/m}{nat}{m $\leq$ n}
 
 
-	\tadAxiomas[\paratodo{posicion,}{\ p, e, p1, p2} \paratodo{ conj(posicion),}{\ ps} \paratodo{mapa}{\ m}]
+	\tadAxiomas[\paratodo{posicion}{\ p, p', p1, p2}, \paratodo{conj(posicion)}{\ ps}, \paratodo{mapa}{\ m}]
 		
 		
 		\tadAxioma{posiciones(vacio)}{$\emptyset$}
 		\tadAxioma{posiciones(AgregarPos(p,ps,m))}{Ag(p, posiciones(m))}
 				
-		\tadAxioma{conexionesDirectas(p, AgregarPos(e, ps, m))}
-		{\IF e = p THEN
+		\tadAxioma{conexionesDirectas(p, AgregarPos(p', ps, m))}
+		{\IF p = p' THEN
 			ps
 		ELSE
 			{\IF p $\in$ ps THEN
-				Ag(e, conexionesDirectas(p,m))
+				Ag(p', conexionesDirectas(p,m))
 			ELSE
 				conexionesDirectas(p,m)
 			FI}
 		FI}
 		
-		\tadAxioma{conexion?(p1, p2, AgregarPos(e, ps, m))}
-		{\IF p1 = e THEN
+		\tadAxioma{conexion?(p1, p2, AgregarPos(p', ps, m))}
+		{\IF p1 = p' THEN
 			{\IF vacio?(ps) THEN
 				false
 			ELSE 
 				p2 $\in$ ps $\lor$ hayAlgunaConexion?(p2, ps, m)
 			FI}
 		ELSE
-			{\IF p2 = e THEN
+			{\IF p2 = p' THEN
 				{\IF vacio?(ps) THEN
 					false
 				ELSE 
@@ -80,11 +78,8 @@
 			{\IF $\pi_2$(p) $<$ $\pi_2$(p') THEN
 				distancia( $\langle\pi_1$(p), $\pi_2$(p')$\rangle$, $\langle\pi_1$(p'), $\pi_2$(p)$\rangle$)
 			ELSE
-				$\sqrt{((\pi_1(p) - \pi_1(p')) \times (\pi_1(p) - \pi_1(p'))) + ((\pi_2(p) - 		\pi_2(p')) \times (\pi_2(p) - \pi_2(p')))}$
+				$\sqrt{((\pi_1(p) - \pi_1(p')) \times (\pi_1(p) - \pi_1(p'))) + ((\pi_2(p) - \pi_2(p')) \times (\pi_2(p) - \pi_2(p')))}$
 			FI}
 		FI}
-
-		\tadAxioma{$\sqrt{n}$}{encontrarRaiz(n,n)}
-		\tadAxioma{encontrarRaiz(n,m)}{\IF n $<$ m $\times$ m THEN encontrarRaiz(n, pred(m)) ELSE m FI}
 
 \end{tad}
