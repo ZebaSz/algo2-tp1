@@ -164,13 +164,10 @@
 			FI} $\cup$ jugadoresCapturandoPk(sinUno(js), p, s)
 		FI}
 
-
-
-
 		\tadAxioma{capturaPokemon?(j, j', p', s)}{
-			capturando?(j, posiciones(mapa(s)), s) $\yluego$
-			2 $<$ distancia(posCaptura(j, posiciones(mapa(s)), s), p') $\land$
-			$\neg\emptyset$?(jugadoresCapturandoPk(posCaptura(j, posiciones(mapa(s)), s)) - \{j'\}) $\yluego$
+			capturando?(j, posiciones(mapa(s)), s) $\yluego$ $\\$
+			2 $<$ distancia(posCaptura(j, posiciones(mapa(s)), s), p') $\land$ $\\$
+			$\neg\emptyset$?(jugadoresCapturandoPk(posCaptura(j, posiciones(mapa(s)), s)) - \{j'\}) $\yluego$ $\\$
 			j = dameUno(jugadoresCapturandoPk(posCaptura(j, posiciones(mapa(s)), s)) - \{j'\})
 		}
 
