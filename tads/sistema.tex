@@ -151,7 +151,9 @@
 
 		\tadAxioma{pokemonACapturar(j, ps, s)}{pokemonEnPos(posCaptura(j, ps, s), s)}
 
-		\tadAxioma{jugadoresCapturandoPk(js, p, s)}
+		\tadAxioma{jugadoresCapturandoPk(p, s)}{juntarJugadoresCapturando(jugadoresConectados(jugadores(s), s), p, s)}
+		
+		\tadAxioma{juntarJugadoresCapturando(js, p, s)}
 		{\IF vacio?(js) THEN 
 			$\emptyset$ 
 		ELSE
@@ -162,11 +164,14 @@
 			FI} $\cup$ jugadoresCapturandoPk(sinUno(js), p, s)
 		FI}
 
+
+
+
 		\tadAxioma{capturaPokemon?(j, j', p', s)}{
 			capturando?(j, posiciones(mapa(s)), s) $\yluego$
 			2 $<$ distancia(posCaptura(j, posiciones(mapa(s)), s), p') $\land$
-			$\neg\emptyset$?(jugadoresCapturandoPk(jugadoresConectados(jugadores(s), s), posCaptura(j, posiciones(mapa(s)), s)) - \{j'\}) $\yluego$
-			j = dameUno(jugadoresCapturandoPk(jugadoresConectados(jugadores(s), s), posCaptura(j, posiciones(mapa(s)), s)) - \{j'\})
+			$\neg\emptyset$?(jugadoresCapturandoPk(posCaptura(j, posiciones(mapa(s)), s)) - \{j'\}) $\yluego$
+			j = dameUno(jugadoresCapturandoPk(posCaptura(j, posiciones(mapa(s)), s)) - \{j'\})
 		}
 
 		%FIN NUEVO
