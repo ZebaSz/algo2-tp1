@@ -136,7 +136,7 @@
 		\tadAxioma{pokemonsCapturados(j, pagarBoleta(s,j',n))}{pokemonsCapturados(j, s) - \IF j = j' THEN pokemonesADebitar(j,n,s) ELSE $\emptyset$ FI}
 		\tadAxioma{pokemonsCapturados(j, moverJugador(s,j',p))}
 		{\IF conectado?(j) $\yluego$ capturaPokemon?(j, j', p', s) THEN
-			Ag(pokemonACapturar(j, posiciones(mapa(s)), s)), $\emptyset$)
+			Ag(pokemonACapturar(j, s)), $\emptyset$)
 		ELSE
 			$\emptyset$
 		FI $\cup$ pokemonsCapturados(j, s)}
@@ -149,7 +149,7 @@
 
 		\tadAxioma{posCaptura(j, ps, s)}{\IF vacio?(sinUno(ps)) THEN dameUno(ps) ELSE posCaptura(j, sinUno(ps), s) FI}
 
-		\tadAxioma{pokemonACapturar(j, ps, s)}{pokemonEnPos(posCaptura(j, ps, s), s)}
+		\tadAxioma{pokemonACapturar(j, s)}{pokemonEnPos(posCaptura(j, posiciones(mapa(s)), s), s)}
 
 		\tadAxioma{jugadoresCapturandoPk(p, s)}{juntarJugadoresCapturando(jugadoresConectados(jugadores(s), s), p, s)}
 		
