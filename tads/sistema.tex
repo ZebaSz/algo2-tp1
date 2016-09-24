@@ -145,7 +145,8 @@
 
 		\tadAxioma{capturandoPk?(j, p ,s)}{hayPokemon?(p, s) $\land$ distancia(posicionJugador(j, s), p) $\leq$ 2}
 
-		\tadAxioma{capturando?(j, ps, s)}{vacio?(ps) $\oluego$ capturandoPK?(j, dameUno(ps), s) $\lor$ capturando(j, sinUno(ps), s)}
+		\tadAxioma{capturando?(j, ps, s)}
+		{\IF vacio?(ps) THEN false ELSE capturandoPK?(j, dameUno(ps), s) $\lor$ capturando(j, sinUno(ps), s) FI}
 
 		\tadAxioma{posCaptura(j, ps, s)}{\IF vacio?(sinUno(ps)) THEN dameUno(ps) ELSE posCaptura(j, sinUno(ps), s) FI}
 
