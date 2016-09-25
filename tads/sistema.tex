@@ -96,13 +96,11 @@
 
 		\tadOperacion{pokemonsCerca?}{posicion/p, conj(posicion)/ps, sistema/s}{bool}{p $\in$ posiciones(mapa(s)) $\land$ ps $\subseteq$ posiciones(mapa(s))}
 
-		\tadOperacion{jugadoresDisponiblesACapturar}{conj(jugador)/js, posicion/p, jugador/j, posicion/p', sistema/s}{conj(jugador)}{}
-
-		\tadOperacion{alguienCapturaPokemon?}{conj(jugador)/js, posicion/p, sistema/s}{bool}{}
+		\tadOperacion{alguienCapturaPokemon?}{conj(jugador)/js, posicion/p, sistema/s}{bool}{js $\subseteq$ jugadoresConectados(jugadores(s), s) $\land$ p $\in$ posiciones(mapa(s))}
 
 		\tadOperacion{valorPokemones}{multiconj(pokemon)/pks, sistema/s}{nat}{0 $< \#$todosLosPokemons(s)}
 
-		\tadOperacion{pokemonesADebitar}{jugador/j, nat/n, sistema/s}{multiconj(pokemon)}{j $\in$ jugadores(s)}
+		\tadOperacion{pokemonesADebitar}{jugador/j, nat/n, sistema/s}{multiconj(pokemon)}{j $\in$ jugadores(s) $\yluego$ n $\leq$ valorPokemones(pokemonsCapturados(j, s))}
 
 		\tadOperacion{filtrar}{multiconj(conj(pokemon))/cpks, nat/n, sistema/s}{multiconj(conj(pokemon))}{0 $< \#$todosLosPokemons(s)}
 
