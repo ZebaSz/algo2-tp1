@@ -76,7 +76,7 @@
 		
 		\tadOperacion{capturaPokemon?}{jugador/j, jugador/j', posicion/p, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) \\ $\land$ j' $\in$ jugadoresConectados(jugadores(s), s) \\ $\land$ p $\in$ posiciones(mapa(s))}
 
-		\tadOperacion{pokemonACapturar}{jugador/j, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) \\ $\yluego$ hayPokemon?(posCaptura(j,s),s)}
+		\tadOperacion{pokemonACapturar}{jugador/j, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) \\ $\yluego$ enRangoDeAlgunPk?(j, posiciones(mapa(s)), s)}
 
 		\tadOperacion{jugadoresConectados}{conj(jugador)/js, sistema/s}{conj(jugador)}{js $\subseteq$ jugadores(s)}
 		
