@@ -96,8 +96,6 @@
 
 		\tadOperacion{pokemonsCerca?}{posicion/p, conj(posicion)/ps, sistema/s}{bool}{p $\in$ posiciones(mapa(s)) $\land$ ps $\subseteq$ posiciones(mapa(s))}
 
-		\tadOperacion{alguienCapturaPokemon?}{conj(jugador)/js, jugador/j, posicion/p, sistema/s}{bool}{js $\subseteq$ jugadoresConectados(jugadores(s), s) \\ $\land$ j $\in$ jugadoresConectados(jugadores(s), s) \\ $\land$ p $\in$ posiciones(mapa(s))}
-
 		\tadOperacion{alguienCapturaEnPos?}{conj(jugador)/js, posicion/p, jugador/j, posicion/p', sistema/s}{bool}{js $\subseteq$ jugadoresConectados(jugadores(s), s) \\ $\land$ j $\in$ jugadoresConectados(jugadores(s), s) \\ $\land$ p $\in$ posiciones(mapa(s)) $\land$ p' $\in$ posiciones(mapa(s))}
 
 		\tadOperacion{valorPokemones}{multiconj(pokemon)/pks, sistema/s}{nat}{$\neg$0?($\#$todosLosPokemons(s))}
@@ -257,11 +255,8 @@
 		\tadAxioma{hayPokemon?(p, cambiarCotizacion(s,n))}{hayPokemon?(p, s)}
 		\tadAxioma{hayPokemon?(p, pagarBoleta(s,j,n))}{hayPokemon?(p, s)}
 
-		\tadAxioma{alguienCapturaPokemon?(js, j, p, s)}
-		{$\neg$vacio?(js) $\yluego$ (capturaPokemon?(dameUno(js), j, p, s) $\lor$ alguienCapturaPokemon?(sinUno(js), j, p, s))}
-
 		\tadAxioma{alguienCapturaEnPos?(js, p, j, p', s)}
-		{\IF $\neg$vacio?(js) THEN
+		{\IF vacio?(js) THEN
 			false
 		ELSE
 			{\IF capturaPokemon?(dameUno(js), j, p', s) THEN
