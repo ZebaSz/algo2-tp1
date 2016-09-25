@@ -1,74 +1,78 @@
 \newcommand{\renombre}[2]{\tadNombre{TAD #1} es \tadNombre{#2}}
 
-\renombre{Posicion}{Tupla(NatExtendido, NatExtendido)}
+\subsection{Renombres}
 
-\renombre{Pokemon}{String}
+	\renombre{Posicion}{Tupla(NatExtendido, NatExtendido)}
 
-\renombre{Jugador}{Nat}
+	\renombre{Pokemon}{String}
 
-\begin{tad}{\tadNombre{NatExtendido}}
+	\renombre{Jugador}{Nat}
 
-	\tadExporta{\argumento $\div$ \argumento, $\sqrt{\argumento}$}
+\subsection{Extensiones}
 
-	\tadExtiende{\tadNombre{Nat}}
+	\begin{tad}{\tadNombre{NatExtendido}}
 
-	\tadOtrasOperaciones
+		\tadExporta{\argumento $\div$ \argumento, $\sqrt{\argumento}$}
 
-		\tadOperacion{\argumento $\div$ \argumento}{nat/n, nat/m}{nat}{0 $<$ m}
+		\tadExtiende{\tadNombre{Nat}}
 
-		\tadOperacion{$\sqrt{\argumento}$}{nat}{nat}{}
+		\tadOtrasOperaciones
 
-		\tadOperacion{encontrarRaiz}{nat/n, nat/m}{nat}{m $\leq$ n}
+			\tadOperacion{\argumento $\div$ \argumento}{nat/n, nat/m}{nat}{0 $<$ m}
 
-	\tadAxiomas[\paratodo{nat}{\ a, b}]
+			\tadOperacion{$\sqrt{\argumento}$}{nat}{nat}{}
 
-		\tadAxioma{a $\div$ b}{\IF a $<$ b THEN 0 ELSE 1 + ((a-b) $\div$ b) FI}
+			\tadOperacion{encontrarRaiz}{nat/n, nat/m}{nat}{m $\leq$ n}
 
-		\tadAxioma{$\sqrt{a}$}{encontrarRaiz(a,a)}
+		\tadAxiomas[\paratodo{nat}{\ a, b}]
 
-		\tadAxioma{encontrarRaiz(a, b)}{\IF a $<$ b $\times$ b THEN encontrarRaiz(a, pred(b)) ELSE b FI}
+			\tadAxioma{a $\div$ b}{\IF a $<$ b THEN 0 ELSE 1 + ((a-b) $\div$ b) FI}
 
-\end{tad}
+			\tadAxioma{$\sqrt{a}$}{encontrarRaiz(a,a)}
 
+			\tadAxioma{encontrarRaiz(a, b)}{\IF a $<$ b $\times$ b THEN encontrarRaiz(a, pred(b)) ELSE b FI}
 
-\begin{tad}{\tadNombre{MulticonjuntoExtendido($\alpha$)}}
-
-	\tadUsa{\tadNombre{Conjunto($\alpha$)}}
-
-	\tadExporta{partes, \argumento $-$ \argumento}
-
-	\tadExtiende{\tadNombre{Multiconjunto($\alpha$)}}
-
-	\tadOtrasOperaciones
-
-		\tadOperacion{partes}{multiconj($\alpha$)}{conj(multiconj($\alpha$))}{}
-
-		\tadOperacion{agregarATodos}{$\alpha$, conj(multiconj($\alpha$))}{conj(multiconj($\alpha$))}{}
-
-		\tadOperacion{\argumento $-$ \argumento}{multiconj($\alpha$), multiconj($\alpha$)}{multiconj($\alpha$)}{}
-
-	\tadAxiomas[\paratodo{$\alpha$}{a}, \paratodo{multiconj($\alpha$)}{\ as, bs}, \paratodo{conj(multiconj($\alpha$))}{\ cas}]
-
-		\tadAxioma{partes(as)}
-		{\IF vacio?(as) THEN
-			Ag($\emptyset$,$\emptyset$)
-		ELSE	
-			agregarATodos(dameUno(as), partes(sinUno(as))) $\cup$ partes(sinUno(as)) 
-		FI}
-
-		\tadAxioma{agregarATodos(a, cas)}
-		{\IF vacio?(cas) THEN
-			$\emptyset$
-		ELSE
-			Ag(Ag(a, dameUno(cas)), agregarATodos(a, sinUno(cas))
-		FI}
+	\end{tad}
 
 
-		\tadAxioma{as $-$ bs}
-		{\IF vacio?(bs) THEN
-			as
-		ELSE
-			(as $-$ \{dameUno(bs)\}) $-$ sinUno(bs)
-		FI}
+	\begin{tad}{\tadNombre{MulticonjuntoExtendido($\alpha$)}}
 
-\end{tad}
+		\tadUsa{\tadNombre{Conjunto($\alpha$)}}
+
+		\tadExporta{partes, \argumento $-$ \argumento}
+
+		\tadExtiende{\tadNombre{Multiconjunto($\alpha$)}}
+
+		\tadOtrasOperaciones
+
+			\tadOperacion{partes}{multiconj($\alpha$)}{conj(multiconj($\alpha$))}{}
+
+			\tadOperacion{agregarATodos}{$\alpha$, conj(multiconj($\alpha$))}{conj(multiconj($\alpha$))}{}
+
+			\tadOperacion{\argumento $-$ \argumento}{multiconj($\alpha$), multiconj($\alpha$)}{multiconj($\alpha$)}{}
+
+		\tadAxiomas[\paratodo{$\alpha$}{a}, \paratodo{multiconj($\alpha$)}{\ as, bs}, \paratodo{conj(multiconj($\alpha$))}{\ cas}]
+
+			\tadAxioma{partes(as)}
+			{\IF vacio?(as) THEN
+				Ag($\emptyset$,$\emptyset$)
+			ELSE	
+				agregarATodos(dameUno(as), partes(sinUno(as))) $\cup$ partes(sinUno(as)) 
+			FI}
+
+			\tadAxioma{agregarATodos(a, cas)}
+			{\IF vacio?(cas) THEN
+				$\emptyset$
+			ELSE
+				Ag(Ag(a, dameUno(cas)), agregarATodos(a, sinUno(cas))
+			FI}
+
+
+			\tadAxioma{as $-$ bs}
+			{\IF vacio?(bs) THEN
+				as
+			ELSE
+				(as $-$ \{dameUno(bs)\}) $-$ sinUno(bs)
+			FI}
+
+	\end{tad}

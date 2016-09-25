@@ -68,9 +68,9 @@
 		\tadOperacion{jugadoresConectados}{conj(jugador)/js, sistema/s}{conj(jugador)}{js $\subseteq$ jugadores(s)}
 		
 		\tadOperacion{enRangoDeCaptura?}{jugador/j, posicion/p, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ p $\in$ posiciones(mapa(s)))}
-		\tadOperacion{capturando?}{jugador/j, conj(posicion)/ps, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ ps $\subseteq$ posiciones(mapa(s)))} 
-		\tadOperacion{posCaptura}{jugador/j, sistema/s}{posicion}{j $\in$ jugadoresConectados(jugadores(s), s) $\yluego$ capturando?(j, posiciones(mapa(s)), s)} 
-		\tadOperacion{posCapturaAux}{jugador/j, conj(posicion)/ps, sistema/s}{posicion}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ ps $\subseteq$ posiciones(mapa(s))) $\yluego$ capturando?(j, ps, s)} 
+		\tadOperacion{enRangoDeAlgunPk?}{jugador/j, conj(posicion)/ps, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ ps $\subseteq$ posiciones(mapa(s)))} 
+		\tadOperacion{posCaptura}{jugador/j, sistema/s}{posicion}{j $\in$ jugadoresConectados(jugadores(s), s) $\yluego$ enRangoDeAlgunPk?(j, posiciones(mapa(s)), s)} 
+		\tadOperacion{posCapturaAux}{jugador/j, conj(posicion)/ps, sistema/s}{posicion}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ ps $\subseteq$ posiciones(mapa(s))) $\yluego$ enRangoDeAlgunPk?(j, ps, s)} 
 		\tadOperacion{jugadoresCapturando}{posicion/p, sistema/s}{conj(jugador)}{p $\in$ posiciones(mapa(s)))}
 		\tadOperacion{jugadoresCapturandoAux}{conj(jugador)/js, posicion/p, sistema/s}{conj(jugador)}{js $\subseteq$ jugadoresConectados(jugadores(s), s) $\land$ p $\in$ posiciones(mapa(s)))} 
 		\tadOperacion{movsLejosDePosDespuesDeMov}{jugador/j, posicion/p, jugador/j', posicion/p', sistema/s}{nat}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ j' $\in$ jugadoresConectados(jugadores(s), s) $\land$ p $\in$ posiciones(mapa(s)) $\land$ p' $\in$ posiciones(mapa(s))} 
@@ -147,7 +147,7 @@
 
 		\tadAxioma{enRangoDeCaptura?(j, p ,s)}{hayPokemon?(p, s) $\land$ distancia(posicionJugador(j, s), p) $\leq$ 2}
 
-		\tadAxioma{capturando?(j, ps, s)}{\IF vacio?(ps) THEN false ELSE enRangoDeCaptura?(j, dameUno(ps), s) $\lor$ capturando(j, sinUno(ps), s) FI}
+		\tadAxioma{enRangoDeAlgunPk?(j, ps, s)}{\IF vacio?(ps) THEN false ELSE enRangoDeCaptura?(j, dameUno(ps), s) $\lor$ enRangoDeAlgunPk?(j, sinUno(ps), s) FI}
 
 		\tadAxioma{posCaptura(j, s)}{posCapturaAux(j, posiciones(mapa(s)), s)}
 
@@ -175,7 +175,7 @@
 		FI}
 
 		\tadAxioma{capturaPokemon?(j, j', p', s)}{
-			capturando?(j, posiciones(mapa(s)), s) $\yluego$ $\\ $
+			enRangoDeAlgunPk?(j, posiciones(mapa(s)), s) $\yluego$ $\\ $
 			movsLejosDePosDespuesDelMov(j, posCaptura(j, s), j', p', s) = 10 $\land$ \\
 			$\neg\emptyset$?(jugadoresCapturando(posCaptura(j, s), s)) $\yluego$ \\
 			j = dameUno(jugadoresCapturando(posCaptura(j, s), s))
