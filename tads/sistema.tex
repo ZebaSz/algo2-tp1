@@ -19,7 +19,7 @@
 	(movsLejosDePos(j,p,s) \igobs movsLejosDePos(j,p,s'))))))}
 		
 	\tadGeneradores
-		\tadAlinearFunciones{desconectarJugador~}{sistema/s, jugador/j, posicion/p}
+		\tadAlinearFunciones{desconectarJugador}{sistema/s, jugador/j, posicion/p}
 
 		\tadOperacion{crearSistema}{mapa/m, nat/n}{sistema}{0 $<$ n}
 
@@ -32,14 +32,14 @@
 		
 		\tadOperacion{moverJugador}{sistema/s, jugador/j, posicion/p}{sistema}{(j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s)  $\yluego$conectado?(j,s)) $\land$ p $\in$ posiciones(mapa(s))}
 
-		\tadOperacion{agregarPokemon}{sistema/s, pokemon, posicion/p}{sistema}{p $\in$ posiciones(mapa(s)) $\yluego$ ($\neg$(hayPokemon?(p, s)) $\land$ \\ pokemonsCerca?(p, posiciones(mapa(s)), s))}
+		\tadOperacion{agregarPokemon}{sistema/s, pokemon, posicion/p}{sistema}{p $\in$ posiciones(mapa(s)) $\yluego$ ($\neg$(hayPokemon?(p, s)) \\ $\land$ pokemonsCerca?(p, posiciones(mapa(s)), s))}
 
 		\tadOperacion{cambiarCotizacion}{sistema/s, nat/n}{sistema}{0 $<$ n}
 		
-		\tadOperacion{pagarBoleta}{sistema/s, jugador/j, nat/n}{sistema}{j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s) $\yluego$ n $\leq$ valorPokemones(pokemonesCapturados(j))}
+		\tadOperacion{pagarBoleta}{sistema/s, jugador/j, nat/n}{sistema}{j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s) \\ $\yluego$ n $\leq$ valorPokemones(pokemonesCapturados(j))}
 		
 	\tadObservadores
-		\tadAlinearFunciones{movsLejosDePosDespuesDeMov~}{jugador/j, posicion/p, jugador/j', posicion/p', sistema/s}
+		\tadAlinearFunciones{pokemonsCapturados}{jugador/j, posicion/p, sistema/s}
 
 		\tadOperacion{mapa}{sistema}{mapa}{}
 
@@ -50,11 +50,11 @@
 		\tadOperacion{pokemonsCapturados}{jugador/j, sistema/s}{multiconj(pokemon)}{j $\in$ jugadores(s) $\yluego \neg$eliminado?(j,s)}
 		\tadOperacion{hayPokemon?}{posicion/p, sistema/s}{bool}{p $\in$ posiciones(mapa(s))}
 		\tadOperacion{pokemonEnPos}{posicion/p, sistema/s}{pokemon}{p $\in$ posiciones(mapa(s)) $\yluego$ hayPokemon?(p,s)}
-		\tadOperacion{movsLejosDePos}{jugador/j, posicion/p, sistema/s}{nat}{j $\in$ jugadoresConectados(jugadores(s)), p $\in$ posiciones(mapa(s))}
+		\tadOperacion{movsLejosDePos}{jugador/j, posicion/p, sistema/s}{nat}{j $\in$ jugadoresConectados(jugadores(s)) \\ $\land$ p $\in$ posiciones(mapa(s))}
 		\tadOperacion{pokeCotizacion}{sistema/s}{nat}{}
 
 	\tadOtrasOperaciones
-		\tadAlinearFunciones{pokemonsCapturadosPorGrupo~}{jugador/j, posiciones/ps, sistema/s}
+		\tadAlinearFunciones{movsLejosDePosDespuesDeMov}{posicion/p, conj(posicion)/ps, sistema/s}
 		\tadOperacion{eliminado?}{jugador/j, sistema/s}{bool}{j $\in$ jugadores(s)}
 
 		\tadOperacion{rareza}{pokemon/pk, sistema/s}{nat}{0 $<$ $\#$todosLosPokemons(s)}
@@ -63,17 +63,17 @@
 		\tadOperacion{pokemonsEnArea}{conj(posicion)/ps, sistema/s}{multiconj(pokemon)}{ps $\subseteq$ posiciones(mapa(s))}
 		\tadOperacion{pokemonsCapturadosPorGrupo}{conj(jugador)/js, sistema/s}{multiconj(pokemon)}{js $\subseteq$ jugadores(s)}
 		
-		\tadOperacion{capturaPokemon?}{jugador/j, jugador/j', posicion/p, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ j' $\in$ jugadoresConectados(jugadores(s), s) $\land$ p $\in$ posiciones(mapa(s))}
-		\tadOperacion{pokemonACapturar}{jugador/j, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) $\yluego$ hayPokemon?(posCaptura(j,s),s)}
+		\tadOperacion{capturaPokemon?}{jugador/j, jugador/j', posicion/p, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) \\ $\land$ j' $\in$ jugadoresConectados(jugadores(s), s) \\ $\land$ p $\in$ posiciones(mapa(s))}
+		\tadOperacion{pokemonACapturar}{jugador/j, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) \\ $\yluego$ hayPokemon?(posCaptura(j,s),s)}
 		\tadOperacion{jugadoresConectados}{conj(jugador)/js, sistema/s}{conj(jugador)}{js $\subseteq$ jugadores(s)}
 		
 		\tadOperacion{enRangoDeCaptura?}{jugador/j, posicion/p, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ p $\in$ posiciones(mapa(s)))}
 		\tadOperacion{enRangoDeAlgunPk?}{jugador/j, conj(posicion)/ps, sistema/s}{bool}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ ps $\subseteq$ posiciones(mapa(s)))} 
-		\tadOperacion{posCaptura}{jugador/j, sistema/s}{posicion}{j $\in$ jugadoresConectados(jugadores(s), s) $\yluego$ enRangoDeAlgunPk?(j, posiciones(mapa(s)), s)} 
-		\tadOperacion{posCapturaAux}{jugador/j, conj(posicion)/ps, sistema/s}{posicion}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ ps $\subseteq$ posiciones(mapa(s))) $\yluego$ enRangoDeAlgunPk?(j, ps, s)} 
+		\tadOperacion{posCaptura}{jugador/j, sistema/s}{posicion}{j $\in$ jugadoresConectados(jugadores(s), s) \\ $\yluego$ enRangoDeAlgunPk?(j, posiciones(mapa(s)), s)} 
+		\tadOperacion{posCapturaAux}{jugador/j, conj(posicion)/ps, sistema/s}{posicion}{j $\in$ jugadoresConectados(jugadores(s), s) \\ $\land$ ps $\subseteq$ posiciones(mapa(s))) $\yluego$ enRangoDeAlgunPk?(j, ps, s)} 
 		\tadOperacion{jugadoresCapturando}{posicion/p, sistema/s}{conj(jugador)}{p $\in$ posiciones(mapa(s)))}
 		\tadOperacion{jugadoresCapturandoAux}{conj(jugador)/js, posicion/p, sistema/s}{conj(jugador)}{js $\subseteq$ jugadoresConectados(jugadores(s), s) $\land$ p $\in$ posiciones(mapa(s)))} 
-		\tadOperacion{movsLejosDePosDespuesDeMov}{jugador/j, posicion/p, jugador/j', posicion/p', sistema/s}{nat}{j $\in$ jugadoresConectados(jugadores(s), s) $\land$ j' $\in$ jugadoresConectados(jugadores(s), s) $\land$ p $\in$ posiciones(mapa(s)) $\land$ p' $\in$ posiciones(mapa(s))} 
+		\tadOperacion{movsLejosDePosDespuesDeMov}{jugador/j, posicion/p, jugador/j', posicion/p', sistema/s}{nat}{j $\in$ jugadoresConectados(jugadores(s), s) \\ $\land$ j' $\in$ jugadoresConectados(jugadores(s), s) \\ $\land$ p $\in$ posiciones(mapa(s)) $\land$ p' $\in$ posiciones(mapa(s))} 
 
 		\tadOperacion{pokemonsCerca?}{posicion/p, conj(posicion)/ps, sistema/s}{bool}{p $\in$ posiciones(mapa(s)) $\land$ ps $\subseteq$ posiciones(mapa(s))}
 
