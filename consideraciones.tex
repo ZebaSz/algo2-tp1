@@ -18,9 +18,9 @@
 
 	\item Suponemos que un jugador puede estar en la misma posición que otros jugadores o un pokemon.
 
-	\item Dado que el TAD Pokemon es String y no podemos diferenciar pokemons del mismo tipo, los pokemonsCapturados los representamos con un Multiconjunto de pokemons.
+	\item Dado que el TAD Pokemon es String y no podemos diferenciar pokemons del mismo tipo, los \texttt{pokemonsCapturados} los representamos con un Multiconjunto de pokemons.
 
-	\item La función movsLejosDePos tiene la logica de cuantos movimientos hubo fuera del rango de captura para avanzar la captura del pokemon que se ubica ahí. Asumimos que si 2 o más jugadores estan en el rango de captura de un pokemon determinado y uno de ellos sale del rango, este movimiento cuenta para los jugadores que permanecen en el rango.
+	\item La función \texttt{movsLejosDePos} tiene la logica de cuantos movimientos hubo fuera del rango de captura para avanzar la captura del pokemon que se ubica ahí. Asumimos que si 2 o más jugadores estan en el rango de captura de un pokemon determinado y uno de ellos sale del rango, este movimiento cuenta para los jugadores que permanecen en el rango.
 
 	\item Extendimos los naturales para agregar la división y la raíz cuadrada. En ambos casos tomamos la parte entera y descartamos el resto.
 
@@ -28,10 +28,17 @@
 
 \end{itemize}
 
-\subsection{Consideraciones de corrección}
+\subsection{Consideraciones de reentrega}
 
 \begin{itemize}
 
-	\item Para solucionar la dependencia circular infinita y el comportamiento automático con capturaPokemon, modularizamos algunas funciones y agregamos movsLejosDePosDespuesDelMov. Así, podemos reducir la instancia sin problemas pero mantener el contador de 10 que teníamos antes.
+	\item Las funciones que corresponden a TADs preexistentes fueron movidas a extensiones de los mismos.
+
+	\item Para solucionar la dependencia circular infinita y el comportamiento automático con capturaPokemon, modularizamos algunas funciones y agregamos \texttt{movsLejosDePosDespuesDelMov}. Así, podemos reducir la instancia sin problemas pero mantener el contador de 10 que teníamos antes.
+
+	\item El generador \texttt{crearSistema} ahora toma la cotización inicial del sistema como parámetro.
+
+	\item No se especifica en la consigna si pagarBoleta requiere que el jugador en cuestión esté conectado. Esto se puede modificar agregando la restricción \texttt{j $\in$ jugadoresConectados(jugadores(s), s)}.
+
 
 \end{itemize}
