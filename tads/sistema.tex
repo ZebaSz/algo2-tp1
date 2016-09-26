@@ -335,11 +335,15 @@
 
 		\tadAxioma{menores(cpks, s)}
 		{\IF vacio?(cpks) THEN $\emptyset$ ELSE
-			{\IF vacio?(sinUno(cpks)) $\oluego$ valorPokemones(dameUno(cpks), s) $\leq$ valorPokemones(dameUno(menores(sinUno(cpks), s)), s) THEN
+			{\IF vacio?(sinUno(cpks)) $\oluego$ valorPokemones(dameUno(cpks), s) $<$ valorPokemones(dameUno(menores(sinUno(cpks), s)), s) THEN
 				Ag(dameUno(cpks), $\emptyset$)
 			ELSE
-				$\emptyset$
-			FI} $\cup$ menores(sinUno(cpks), s)
+				{\IF valorPokemones(dameUno(cpks), s) $=$ valorPokemones(dameUno(menores(sinUno(cpks), s)), s) THEN
+					Ag(dameUno(cpks), $\emptyset$)
+				ELSE
+					$\emptyset$
+				FI} $\cup$  menores(sinUno(cpks), s
+			FI}
 		FI}
 
 \end{tad}
