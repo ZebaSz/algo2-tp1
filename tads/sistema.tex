@@ -198,8 +198,8 @@
 		\tadAxioma{capturaPokemon?(j, j', p, s)}{
 			enRangoDeAlgunPk?(j, posiciones(mapa(s)), s) $\yluego$ \\ 
 			movsLejosDePosDespuesDeMov(j, posCaptura(j, s), j', p, s) = 10 $\land$ \\
-			$\neg\emptyset$?(jugadoresCapturando(posCaptura(j, s), s)) $\yluego$ \\
-			j = dameUno(jugadoresCapturando(posCaptura(j, s), s))
+			$\neg\emptyset$?(jugadoresCapturando(posCaptura(j, s), s) - \{j'\}) $\yluego$ \\
+			j = dameUno(jugadoresCapturando(posCaptura(j, s), s) - \{j'\})
 		}
 
 		\tadAxioma{movsLejosDePos(j, p, registrarJugador(s,j'))}{movsLejosDePos(j, p, s)}
